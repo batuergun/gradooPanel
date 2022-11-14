@@ -321,6 +321,7 @@ button.primary,
   border-radius: var(--custom-border-radius);
   overflow: hidden;
   max-width: 100%;
+  margin-left: 1rem;
 }
 
 .avatar.image {
@@ -495,7 +496,16 @@ button.primary,
   background-color: #272727;
   border-radius: 1.2rem;
   border: none;
-  width: 25vw;
-  min-height: 50vh;
+  width: 24vw;
+  min-height: 40vh;
   padding: 2vw;
+}
+
+.dashboard {
+  width: 100vw;
+  height: 100vh;
+}
+
+.c-dumjqv {
+  display: none !important;
 }
