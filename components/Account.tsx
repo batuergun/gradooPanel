@@ -7,6 +7,7 @@ import {
 import { Database } from "../utils/database.types";
 type Profiles = Database["public"]["Tables"]["profiles"]["Row"];
 import Avatar from "./Avatar";
+import { useRouter } from "next/router";
 
 export default function Account({ session }: { session: Session }) {
   const supabase = useSupabaseClient<Database>();
@@ -14,6 +15,8 @@ export default function Account({ session }: { session: Session }) {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState<Profiles["username"]>(null);
   const [avatar_url, setAvatarUrl] = useState<Profiles["avatar_url"]>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     getProfile();
@@ -113,7 +116,10 @@ export default function Account({ session }: { session: Session }) {
       <div>
         <button
           className="button block"
-          onClick={() => supabase.auth.signOut()}
+          onClick={() => {
+            supabase.auth.signOut();
+            router.push({ pathname: "/" });
+          }}
         >
           Sign Out
         </button>

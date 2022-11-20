@@ -6,6 +6,7 @@ import {
 } from "@supabase/auth-helpers-react";
 import { Database } from "../utils/database.types";
 type Profiles = Database["public"]["Tables"]["profiles"]["Row"];
+import { useRouter } from "next/router";
 
 export default function Dashboard({ session }: { session: Session }) {
   const supabase = useSupabaseClient<Database>();
@@ -13,6 +14,8 @@ export default function Dashboard({ session }: { session: Session }) {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState<Profiles["username"]>(null);
   const [avatarUrl, setAvatarUrl] = useState<Profiles["avatar_url"]>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     getProfile();
@@ -79,6 +82,12 @@ export default function Dashboard({ session }: { session: Session }) {
       </div>
 
       <div>
+        <button
+          className="button block"
+          onClick={() => router.push({ pathname: "/account" })}
+        >
+          Account
+        </button>
         <button
           className="button block"
           onClick={() => supabase.auth.signOut()}
