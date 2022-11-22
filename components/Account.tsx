@@ -80,15 +80,20 @@ export default function Account({ session }: { session: Session }) {
 
   return (
     <div className="form-widget">
-      <Avatar
-        uid={user.id}
-        url={avatar_url}
-        size={150}
-        onUpload={(url) => {
-          setAvatarUrl(url);
-          updateProfile({ username, avatar_url: url });
-        }}
-      />
+      {!user ? (
+        <></>
+      ) : (
+        <Avatar
+          uid={user.id}
+          url={avatar_url}
+          size={150}
+          onUpload={(url) => {
+            setAvatarUrl(url);
+            updateProfile({ username, avatar_url: url });
+          }}
+        />
+      )}
+
       <div>
         <label htmlFor="email">Email</label>
         <input id="email" type="text" value={session.user.email} disabled />
