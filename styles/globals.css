@@ -9,7 +9,7 @@ body {
   --custom-color-brand: #24b47e;
   --custom-color-secondary: #666;
   --custom-border: 1px solid #333;
-  --custom-border-radius: 0.8rem;
+  --custom-border-radius: 1.2rem;
   --custom-spacing: 5px;
 
   padding: 0;
@@ -85,18 +85,19 @@ button.primary,
 .avatar {
   border-radius: var(--custom-border-radius);
   overflow: hidden;
-  max-width: 100%;
+  width: 100%;
   margin-left: 1rem;
 }
 
 .avatar.image {
   object-fit: cover;
+  border-radius: 1.2rem;
 }
 
 .avatar.no-image {
   background-color: #333;
   border: 1px solid rgb(200, 200, 200);
-  border-radius: 5px;
+  border-radius: 1.2rem;
 }
 
 .footer {

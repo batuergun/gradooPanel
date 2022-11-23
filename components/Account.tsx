@@ -116,6 +116,12 @@ export default function Account({ session }: { session: Session }) {
         >
           {loading ? "Loading ..." : "Update"}
         </button>
+        <button
+          className="button block"
+          onClick={() => router.push({ pathname: "/passwordreset" })}
+        >
+          Update Password
+        </button>
       </div>
 
       <div>
