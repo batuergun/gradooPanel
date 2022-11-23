@@ -352,10 +352,6 @@ input[disabled] {
   height: 100vh;
 }
 
-.c-dumjqv {
-  display: none !important;
-}
-
 .sidebar .summary {
   background-color: var(--activeMenu);
 }

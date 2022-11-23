@@ -1,3 +1,4 @@
+import { Line } from "react-chartjs-2";
 import { useState, useEffect } from "react";
 import {
   useUser,
@@ -65,36 +66,88 @@ export default function Dashboard({ session }: { session: Session }) {
   }
 
   return (
-    <div className="dashboard-container">
-      <h1>Dashboard</h1>
-      <div className="flex flex-row justify-around items-center">
-        <h4>{username}</h4>
-        {avatarUrl ? (
-          <img
-            src={avatarUrl}
-            alt="Avatar"
-            className="avatar image"
-            style={{ height: 35, width: 35 }}
-          />
-        ) : (
-          <div className="avatar no-image" style={{ height: 35, width: 35 }} />
-        )}
+    <>
+      <div className="sidebar">
+        <h1>Gradoo Panel</h1>
+        <img src="/img/divider.svg" className="divider" />
+        <div
+          className="section summary"
+          onClick={() => router.push({ pathname: "/" })}
+        >
+          <img src="/img/summary.svg" className="icon" />
+          <h2>Summary</h2>
+        </div>
+        <div
+          className="section query"
+          onClick={() => router.push({ pathname: "/search" })}
+        >
+          <img src="/img/query.svg" className="icon" />
+          <h2>Search</h2>
+        </div>
+
+        <div className="section campaigns" campaign-button>
+          <img src="/img/summary.svg" className="icon" />
+          <h2>Campaigns</h2>
+        </div>
+
+        <div className="campaignlist visible" campaign-list>
+          <div
+            className="campaignelement"
+            onClick={() => router.push({ pathname: "/project/1" })}
+          >
+            Gradoo x Derece Atölyesi
+          </div>
+          <div
+            className="campaignelement"
+            onClick={() => router.push({ pathname: "/project/2" })}
+          >
+            Learn How to Learn: English
+          </div>
+        </div>
+
+        <div className="section settings">
+          <img src="/img/db.svg" className="icon" />
+          <h2 onClick={() => supabase.auth.signOut()}>Log Out</h2>
+        </div>
       </div>
 
-      <div>
-        <button
-          className="button block"
-          onClick={() => router.push({ pathname: "/account" })}
-        >
-          Account
-        </button>
-        <button
-          className="button block"
-          onClick={() => supabase.auth.signOut()}
-        >
-          Sign Out
-        </button>
+      <div className="container">
+        <div className="header">
+          <div className="title">
+            <img src="/img/summary2.svg" />
+            <h2>Summary</h2>
+          </div>
+          <div
+            className="profile"
+            onClick={() => router.push({ pathname: "/account" })}
+          >
+            <h3>{username}</h3>
+            {avatarUrl ? (
+              <img src={avatarUrl} alt="Avatar" className="avatar image" />
+            ) : (
+              <div className="avatar no-image" />
+            )}
+          </div>
+        </div>
+
+        <div className="viewport">
+          <div className="graph graph1">
+            <canvas id="current"></canvas>
+          </div>
+          <div className="graph graph2">
+            <canvas id="future"></canvas>
+          </div>
+          <div className="graph graph3">
+            <canvas id="usertype"></canvas>
+          </div>
+          <div className="graph graph4">
+            <canvas id="highschool_class"></canvas>
+          </div>
+          <div className="graph graph5">
+            <canvas id="university_class"></canvas>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
