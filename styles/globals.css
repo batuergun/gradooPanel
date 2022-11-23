@@ -503,6 +503,10 @@ input[disabled] {
   font-size: 1.4vw;
 }
 
+.container .header .title h2 {
+  color: var(--fontPrimary);
+}
+
 .container .header .title img {
   width: 2.5vw;
   margin-right: 1vw;
@@ -524,6 +528,7 @@ input[disabled] {
 }
 
 .container .header .profile h3 {
+  color: var(--fontPrimary);
   font-size: 1vw;
   font-weight: 500;
 }
@@ -531,4 +536,5 @@ input[disabled] {
 .container .header .profile img {
   margin-left: 0.8vw;
   width: 3vw;
+  height: 3vw;
 }

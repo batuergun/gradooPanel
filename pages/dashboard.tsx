@@ -1,4 +1,14 @@
-import { Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import { useState, useEffect } from "react";
 import {
   useUser,
@@ -8,6 +18,49 @@ import {
 import { Database } from "../utils/database.types";
 type Profiles = Database["public"]["Tables"]["profiles"]["Row"];
 import { useRouter } from "next/router";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+export const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: "top" as const,
+    },
+    title: {
+      display: true,
+      text: "Chart.js Line Chart",
+    },
+  },
+};
+
+const labels = ["January", "February", "March", "April", "May", "June", "July"];
+
+export const data = {
+  labels,
+  datasets: [
+    {
+      label: "Dataset 1",
+      data: [100, 100, 200, 500],
+      borderColor: "rgb(255, 99, 132)",
+      backgroundColor: "rgba(255, 99, 132, 0.5)",
+    },
+    {
+      label: "Dataset 2",
+      data: [200, 300, 100, 300],
+      borderColor: "rgb(53, 162, 235)",
+      backgroundColor: "rgba(53, 162, 235, 0.5)",
+    },
+  ],
+};
 
 export default function Dashboard({ session }: { session: Session }) {
   const supabase = useSupabaseClient<Database>();
@@ -132,7 +185,7 @@ export default function Dashboard({ session }: { session: Session }) {
 
         <div className="viewport">
           <div className="graph graph1">
-            <canvas id="current"></canvas>
+            <Bar options={options} data={data} />;
           </div>
           <div className="graph graph2">
             <canvas id="future"></canvas>
