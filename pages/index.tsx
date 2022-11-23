@@ -9,19 +9,17 @@ const Home = () => {
 
   return (
     <>
-      <div className="container">
-        <div className="loginCard">
-          {!session ? (
-            <Auth
-              view="sign_in"
-              supabaseClient={supabase}
-              appearance={{ theme: ThemeSupa }}
-              theme="dark"
-            />
-          ) : (
-            <Dashboard session={session} />
-          )}
-        </div>
+      <div className="loginCard">
+        {!session ? (
+          <Auth
+            view="sign_in"
+            supabaseClient={supabase}
+            appearance={{ theme: ThemeSupa }}
+            theme="dark"
+          />
+        ) : (
+          <Dashboard session={session} />
+        )}
       </div>
     </>
   );
