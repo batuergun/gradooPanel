@@ -1,10 +1,11 @@
-import { Bar } from "react-chartjs-2";
+import { Bar, Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   PointElement,
   BarElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
@@ -24,6 +25,7 @@ ChartJS.register(
   LinearScale,
   PointElement,
   BarElement,
+  LineElement,
   Title,
   Tooltip,
   Legend
@@ -188,7 +190,7 @@ export default function Dashboard({ session }: { session: Session }) {
             <Bar options={options} data={data} />;
           </div>
           <div className="graph graph2">
-            <canvas id="future"></canvas>
+            <Line options={options} data={data} />;
           </div>
           <div className="graph graph3">
             <canvas id="usertype"></canvas>
