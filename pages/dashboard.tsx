@@ -1,15 +1,3 @@
-import { Bar, Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  BarElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
 import { useState, useEffect } from "react";
 import {
   useUser,
@@ -20,49 +8,31 @@ import { Database } from "../utils/database.types";
 type Profiles = Database["public"]["Tables"]["profiles"]["Row"];
 import { useRouter } from "next/router";
 
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+} from "chart.js";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
-  BarElement,
   LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend
 );
 
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
-    },
-    title: {
-      display: true,
-      text: "Chart.js Line Chart",
-    },
-  },
-};
-
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "Dataset 1",
-      data: [100, 100, 200, 500],
-      borderColor: "rgb(255, 99, 132)",
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-    },
-    {
-      label: "Dataset 2",
-      data: [200, 300, 100, 300],
-      borderColor: "rgb(53, 162, 235)",
-      backgroundColor: "rgba(53, 162, 235, 0.5)",
-    },
-  ],
-};
+import TotalApplications from "../components/TotalApplications";
+import Timeline from "../components/Timeline";
 
 export default function Dashboard({ session }: { session: Session }) {
   const supabase = useSupabaseClient<Database>();
@@ -160,9 +130,12 @@ export default function Dashboard({ session }: { session: Session }) {
           </div>
         </div>
 
-        <div className="section settings">
+        <div
+          className="section settings"
+          onClick={() => supabase.auth.signOut()}
+        >
           <img src="/img/db.svg" className="icon" />
-          <h2 onClick={() => supabase.auth.signOut()}>Log Out</h2>
+          <h2>Log Out</h2>
         </div>
       </div>
 
@@ -187,10 +160,10 @@ export default function Dashboard({ session }: { session: Session }) {
 
         <div className="viewport">
           <div className="graph graph1">
-            <Bar options={options} data={data} />;
+            <TotalApplications />
           </div>
           <div className="graph graph2">
-            <Line options={options} data={data} />;
+            <Timeline />
           </div>
           <div className="graph graph3">
             <canvas id="usertype"></canvas>
