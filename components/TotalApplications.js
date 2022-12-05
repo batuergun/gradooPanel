@@ -5,18 +5,20 @@ import { useEffect, useState } from "react";
 export default function TotalApplications() {
   const supabase = useSupabaseClient();
   const [isLoading, setLoading] = useState(false)
-
-  var applist = [];
-  var timeline = [];
-  var graphtimeline = [];
-  var timelineintegral = [];
-  var eventlabels = []
-  var eventdistinct = []
-  var eventtotal = []
-  var eventlist = []
+  const [graphdata, setGraphData] = useState(null)
+  const [graphoptions, setGraphOptions] = useState(null)
 
   useEffect(() => {
     setLoading(true)
+
+    var applist = [];
+    var timeline = [];
+    var graphtimeline = [];
+    var timelineintegral = [];
+    var eventlabels = []
+    var eventdistinct = []
+    var eventtotal = []
+    var eventlist = []
 
     // Get time array for query
     function getTimeline() {
@@ -134,14 +136,12 @@ export default function TotalApplications() {
 
     // Get usertype
     const getUserType = async () => {
-      let userTypes = []
       const { data, error } = await supabase.rpc('distinctusertype')
       for (var i = 0; i < data.length; i++) {
         userTypes.push(data[i]);
       }
-      return userTypes
     }
-    let userTypes = getUserType()
+    getUserType()
 
     // Usertype count
     const getUserTypeCount = async () => {
@@ -156,68 +156,68 @@ export default function TotalApplications() {
     const getSchool = async () => {
       let highschoolClasses = ['Hazirlik', '9', '10', '11', '12']
       for await (let classid of highschoolClasses) {
-        const { data, error } = await supabase.rpc('usertypecount', { class: classid })
+        const { data, error } = await supabase.rpc('classcount', { class: classid })
         highschool_class.push(data);
       }
     }
     getSchool()
 
+    setGraphOptions({
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        datalabels: {
+          display: false,
+        },
+      },
+      scales: {
+        x: {
+          stacked: true,
+        },
+        y: {
+          stacked: true,
+        },
+      },
+    })
+
+    setGraphData({
+      labels: eventlabels,
+      datasets: [
+        {
+          label: 'Unique',
+          data: eventdistinct,
+          backgroundColor: [
+            "rgba(54, 162, 235, 0.2)",
+            "rgba(255, 159, 64, 0.2)",
+            "rgba(255, 206, 86, 0.2)",
+          ],
+          borderColor: [
+            "rgba(54, 162, 235, 1)",
+            "rgba(255, 159, 64, 1)",
+            "rgba(255, 206, 86, 1)",
+          ],
+          borderWidth: 1,
+        },
+        {
+          label: 'Duplicate',
+          data: eventtotal,
+          backgroundColor: [
+            "rgba(255, 206, 86, 0.2)",
+            "rgba(75, 192, 192, 0.2)",
+            "rgba(153, 102, 255, 0.2)",
+          ],
+          borderColor: [
+            "rgba(255, 206, 86, 1)",
+            "rgba(75, 192, 192, 1)",
+            "rgba(153, 102, 255, 1)",
+          ],
+          borderWidth: 1,
+        }
+      ],
+    })
+
     setLoading(false)
   });
-
-  const graphoptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      datalabels: {
-        display: false,
-      },
-    },
-    scales: {
-      x: {
-        stacked: true,
-      },
-      y: {
-        stacked: true,
-      },
-    },
-  }
-
-  const graphdata = {
-    labels: eventlabels,
-    datasets: [
-      {
-        label: 'Unique',
-        data: eventdistinct,
-        backgroundColor: [
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-        ],
-        borderColor: [
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 159, 64, 1)",
-          "rgba(255, 206, 86, 1)",
-        ],
-        borderWidth: 1,
-      },
-      {
-        label: 'Duplicate',
-        data: eventtotal,
-        backgroundColor: [
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-        ],
-        borderColor: [
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-        ],
-        borderWidth: 1,
-      }
-    ],
-  };
 
   if (isLoading) return <p>Loading...</p>
 
