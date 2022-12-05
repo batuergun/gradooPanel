@@ -31,7 +31,7 @@ ChartJS.register(
   Legend
 );
 
-import TotalApplications from "../components/TotalApplications";
+import TotalApplications from "../components/TotalApplications.js";
 import Timeline from "../components/Timeline";
 
 export default function Dashboard({ session }: { session: Session }) {
