@@ -1,26 +1,40 @@
-import { Bar } from "react-chartjs-2";
-import { useEffect, useState } from "react";
+import { Line } from "react-chartjs-2";
 import { createClient } from '@supabase/supabase-js'
+import { useEffect, useState } from "react";
 
 let graphoptions = {
   responsive: true,
-  maintainAspectRatio: false,
   plugins: {
     datalabels: {
       display: false,
     },
+    legend: {
+      position: "top",
+    },
+  },
+  title: {
+    display: false,
+    text: "Applications timeline",
   },
   scales: {
     x: {
-      stacked: true,
+      display: true,
+      title: {
+        display: true,
+      },
     },
     y: {
-      stacked: true,
+      display: true,
+      title: {
+        display: true,
+        text: "Applications",
+      },
+      suggestedMin: 0,
     },
-  },
+  }
 }
 
-export default function TotalApplications() {
+export default function Timeline() {
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
   const [graphdata, setgraphdata] = useState({
@@ -114,37 +128,29 @@ export default function TotalApplications() {
       }
 
       setgraphdata({
-        labels: eventlabels,
+        labels: graphtimeline,
         datasets: [
           {
-            label: 'Unique',
-            data: eventdistinct,
-            backgroundColor: [
-              "rgba(54, 162, 235, 0.2)",
-              "rgba(255, 159, 64, 0.2)",
-              "rgba(255, 206, 86, 0.2)",
-            ],
-            borderColor: [
-              "rgba(54, 162, 235, 1)",
-              "rgba(255, 159, 64, 1)",
-              "rgba(255, 206, 86, 1)",
-            ],
-            borderWidth: 1,
+            label: eventlabels[0],
+            data: eventtimeline[0],
+            borderColor: 'rgba(240, 150, 100, 0.9)',
+            backgroundColor: 'rgba(240, 150, 100, 0.9)',
+            fill: false,
+            pointStyle: 'circle',
+            pointRadius: 3,
+            pointHoverRadius: 7,
+            type: 'line'
           },
           {
-            label: 'Duplicate',
-            data: eventtotal,
-            backgroundColor: [
-              "rgba(255, 206, 86, 0.2)",
-              "rgba(75, 192, 192, 0.2)",
-              "rgba(153, 102, 255, 0.2)",
-            ],
-            borderColor: [
-              "rgba(255, 206, 86, 1)",
-              "rgba(75, 192, 192, 1)",
-              "rgba(153, 102, 255, 1)",
-            ],
-            borderWidth: 1,
+            label: eventlabels[1],
+            data: eventtimeline[1],
+            borderColor: 'rgba(75, 192, 192, 0.9)',
+            backgroundColor: 'rgba(75, 192, 192, 0.9)',
+            fill: false,
+            pointStyle: 'circle',
+            pointRadius: 3,
+            pointHoverRadius: 7,
+            type: 'line'
           }
         ],
       })
@@ -154,58 +160,13 @@ export default function TotalApplications() {
     //gettotalapp(timeline)
     geteventlist()
 
-  }, []);
 
-  
+
+  }, [])
+
   return (
     <>
-      <Bar options={graphoptions} data={graphdata} />
+      <Line options={graphoptions} data={graphdata} />
     </>
   );
-}
-
-
-// Total Application
-async function gettotalapp(timeline) {
-  let timelineintegral = []
-  for (var i = 0; i < 14; i++) {
-    const { data } = await supabase
-      .from("applications")
-      .select()
-      .lt("submitted_at", timeline[13 - i])
-    timelineintegral.push(data);
-  }
-}
-
-// Application Count
-async function getApplicationCount(timeline) {
-
-  var applist = []
-  for (var i = 0; i < 14; i++) {
-    const { data } = await supabase
-      .from("applications")
-      .select()
-      .gte("submitted_at", timeline[14 - i])
-      .lt("submitted_at", timeline[14 - i])
-    applist.push(data);
-  }
-}
-
-// Get usertype
-async function getusercount() {
-  let userTypes = []
-  let userCount = []
-
-  const { data } = await supabase.rpc('distinctusertype')
-  data.forEach(u => {
-    userTypes.push(u.usertype);
-  });
-
-  userTypes.forEach(async usertype => {
-    const usertypecount = async () => {
-      const { data } = await supabase.rpc('usertypecount', { usertypeinput: usertype })
-      userCount.push(data);
-    }
-    await usertypecount()
-  });
 }

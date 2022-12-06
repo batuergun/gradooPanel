@@ -39,8 +39,9 @@ export default function Dashboard(session) {
   const [username, setUsername] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState(null);
 
-  useEffect(() => {
+  const [events, setEvents] = useState(null);
 
+  useEffect(() => {
     getProfile();
     setLoading(false)
   }, [session]);
