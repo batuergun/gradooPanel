@@ -1,12 +1,7 @@
 import { useState, useEffect } from "react";
-import {
-  useUser,
-  useSupabaseClient,
-  Session,
-} from "@supabase/auth-helpers-react";
-import { Database } from "../utils/database.types";
-type Profiles = Database["public"]["Tables"]["profiles"]["Row"];
+import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
+
 
 import {
   Chart as ChartJS,
@@ -34,17 +29,20 @@ ChartJS.register(
 import TotalApplications from "../components/TotalApplications.js";
 import Timeline from "../components/Timeline";
 
-export default function Dashboard({ session }: { session: Session }) {
-  const supabase = useSupabaseClient<Database>();
+export default function Dashboard(session) {
+  const supabase = useSupabaseClient();
   const user = useUser();
-  const [loading, setLoading] = useState(true);
-  const [username, setUsername] = useState<Profiles["username"]>(null);
-  const [avatarUrl, setAvatarUrl] = useState<Profiles["avatar_url"]>(null);
-
   const router = useRouter();
 
+  const [loading, setLoading] = useState(true);
+
+  const [username, setUsername] = useState(null);
+  const [avatarUrl, setAvatarUrl] = useState(null);
+
   useEffect(() => {
+
     getProfile();
+    setLoading(false)
   }, [session]);
 
   async function getProfile() {
@@ -75,7 +73,7 @@ export default function Dashboard({ session }: { session: Session }) {
     }
   }
 
-  async function downloadImage(path: any) {
+  async function downloadImage(path) {
     try {
       const { data, error } = await supabase.storage
         .from("avatars")

@@ -158,7 +158,7 @@ export default async function reload(req, res) {
     });
   }
 
-  deleteTable('applications')
+  //deleteTable('applications')
   await saveQuery(process.env.TYPEFORM_ID)
 
   res.status(200).json('OK')
