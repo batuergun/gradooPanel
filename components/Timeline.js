@@ -117,12 +117,12 @@ export default function Timeline() {
         // Daily application Count
         for (var t = 0; t < 14; t++) {
           const gettimeline = async () => {
-            const { data } = await supabase.rpc('eventapplicationcount', { eventname: 'applications', gte: timeline[14 - t], lt: timeline[13 - t] })
+            const { data } = await supabase.rpc('eventapplicationcount', { eventname: eventlist[i].eventid, gte: timeline[14 - t], lt: timeline[13 - t] })
             timelinecache.push(data);
           }
           await gettimeline()
         }
-
+        console.log(eventtimeline)
         eventlist[i].timeline = timelinecache;
         eventtimeline.push(eventlist[i].timeline);
       }

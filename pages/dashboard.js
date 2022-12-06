@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 
-
 import {
   Chart as ChartJS,
   CategoryScale,

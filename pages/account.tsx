@@ -1,8 +1,4 @@
-import {
-  useSession,
-  useSupabaseClient,
-  Session,
-} from "@supabase/auth-helpers-react";
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import Account from "../components/Account";
 
