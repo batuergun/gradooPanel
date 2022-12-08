@@ -94,21 +94,34 @@ export default function SchoolSearch(session) {
 
         async function schoolQuery(input) {
             if (input !== null) {
+                let searchwords = []
                 let selectedlist = []
                 let schoolList = []
 
                 input.forEach(e => {
-                    selectedlist.push(e.value)
+
+                    if (JSON.stringify(e.value).indexOf(" ") >= 0) {
+                        let words = JSON.stringify(e.value).split(" ")
+                        words.forEach(w => {
+                            selectedlist.push(w)
+                        });
+                    } else {
+                        selectedlist.push(e.value)
+                    }
+
                 });
 
                 const { data } = await supabase.rpc('listsearch', { input: selectedlist })
-                console.log('data - ', data)
 
-                data.forEach(e => {
-                    schoolList.push(e)
-                })
+                if (data !== null) {
+                    data.forEach(e => {
+                        schoolList.push(e)
+                    })
 
-                setSchools(schoolList)
+                    setSchools(schoolList)
+                }
+
+
             }
         }
         schoolQuery(selectedOption)
