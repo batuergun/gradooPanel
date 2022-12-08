@@ -63,7 +63,7 @@ export default function Search(session) {
     }
 
 
-    let [events, selectedEvents] = Events()
+    let [events, selectedEvents] = Events([])
 
     function Events() {
 
@@ -79,7 +79,7 @@ export default function Search(session) {
             }
         });
 
-        return { unselected, selected }
+        return [unselected, selected]
     }
 
     let [cities, selectedCities] = Cities()
@@ -98,7 +98,7 @@ export default function Search(session) {
             }
         });
 
-        return { unselected, selected }
+        return [unselected, selected]
     }
 
     return (
@@ -194,23 +194,24 @@ export default function Search(session) {
                             </>
                         )}
 
-                        {!cityMenu ? (<></>) : (<>
-                            <div className="absolute flex flex-col bg-cardBackground text-fontPrimary rounded-xl p-1 top-[22vh] left-[35vw] z-10 min-w-[20vw] max-h-[35vh] overflow-auto">
+                        {!cityMenu ? (<></>) : (
+                            <>
+                                <div className="absolute flex flex-col bg-cardBackground text-fontPrimary rounded-xl p-1 top-[22vh] left-[35vw] z-10 min-w-[20vw] max-h-[35vh] overflow-auto">
 
-                                {selectedCities.map(city =>
-                                    <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
-                                        <img className="w-3" src="/img/summary2.svg" />
-                                        <a className="text-current text-sm ml-1">{city.title}</a>
-                                    </div>
-                                )}
-                                {cities.map(city =>
-                                    <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
-                                        <a className="text-current text-sm ml-1">{city.title}</a>
-                                    </div>
-                                )}
+                                    {selectedCities.map(city =>
+                                        <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
+                                            <img className="w-3" src="/img/summary2.svg" />
+                                            <a className="text-current text-sm ml-1">{city.title}</a>
+                                        </div>
+                                    )}
+                                    {cities.map(city =>
+                                        <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
+                                            <a className="text-current text-sm ml-1">{city.title}</a>
+                                        </div>
+                                    )}
 
-                            </div>
-                        </>
+                                </div>
+                            </>
                         )}
 
                         <div className="flex bg-cardBackground rounded-xl">
