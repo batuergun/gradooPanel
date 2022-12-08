@@ -127,17 +127,43 @@ export default function Search(session) {
                     </div>
                 </div>
 
-                <div className="flex flex-col grow items-stretch">
-                    <div className="flex h-10 w-[100%] justify-around grow p-3">
-                        <input className="bg-cardBackground shadow-sm rounded-xl text-primary m-1 p-5 border-0" placeholder="Event"></input>
-                        <input className="bg-cardBackground shadow-sm rounded-xl text-primary m-1 p-5 border-0" placeholder="City"></input>
-                        <input className="bg-cardBackground shadow-sm rounded-xl text-primary m-1 p-5 border-0" placeholder="School"></input>
-                        <input className="bg-cardBackground shadow-sm rounded-xl text-primary m-1 p-5 border-0" placeholder="Usertype"></input>
-                        <button className="bg-activeMenu rounded-xl text-fontSecondary m-1 p-5 border-0"></button>
+                <div className="flex-col">
+                    <div className="flex w-full h-10 justify-around grow px-3">
+
+                        <div className="flex bg-cardBackground rounded-xl">
+                            <input className="bg-transparent text-fontPrimary text-sm border-0" placeholder="Event"></input>
+                        </div>
+
+                        <div className="flex bg-cardBackground rounded-xl">
+                            <input className="bg-transparent text-fontPrimary text-sm border-0" placeholder="City"></input>
+                        </div>
+
+                        <div className="flex bg-cardBackground rounded-xl">
+                            <input className="bg-transparent text-fontPrimary text-sm border-0" placeholder="School"></input>
+                        </div>
+
+                        <div className="flex bg-cardBackground rounded-xl">
+                            <input className="bg-transparent text-fontPrimary text-sm border-0" placeholder="Usertype"></input>
+                        </div>
+
+                        <div className="flex bg-cardBackground rounded-xl">
+                            <input className="bg-transparent text-fontPrimary text-sm border-0" placeholder="Class"></input>
+                        </div>
+
+                        <div className="flex bg-activeMenu rounded-xl text-fontSecondary w-10 justify-center hover:cursor-pointer hover:bg-dropShadow">
+                            <img src="/img/query.svg" className="w-5" />
+                        </div>
                     </div>
 
-                    <div className="flex mt-5 p-4">
-                        <div className="p-3 bg-cardBackground w-full h-[70vh] rounded-2xl overflow-auto">
+                    <div className="flex mt-2 p-4">
+                        <div className="flex bg-cardBackground p-4 text-fontPrimary rounded-xl">
+                            <p className="text-current font-semibold">158</p>
+                            <p className="text-current ml-1"> result(s) found.</p>
+                        </div>
+                    </div>
+
+                    <div className="flex p-4">
+                        <div className="p-3 bg-cardBackground w-full h-[55vh] rounded-2xl overflow-auto">
                             <div className="table w-full">
 
                                 <div className="table-header-group">
@@ -151,37 +177,6 @@ export default function Search(session) {
                                 <div class="table-row-group">
 
 
-
-                                    <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
-                                        <div className="table-cell text-current text-sm">Politecnico di Torino</div>
-                                        <div className="table-cell text-current text-sm text-center">Turin</div>
-                                        <div className="table-cell text-current text-sm text-center">856</div>
-                                    </div>
-                                    <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
-                                        <div className="table-cell text-current text-sm">Politecnico di Torino</div>
-                                        <div className="table-cell text-current text-sm text-center">Turin</div>
-                                        <div className="table-cell text-current text-sm text-center">856</div>
-                                    </div>
-                                    <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
-                                        <div className="table-cell text-current text-sm">Politecnico di Torino</div>
-                                        <div className="table-cell text-current text-sm text-center">Turin</div>
-                                        <div className="table-cell text-current text-sm text-center">856</div>
-                                    </div> <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
-                                        <div className="table-cell text-current text-sm">Politecnico di Torino</div>
-                                        <div className="table-cell text-current text-sm text-center">Turin</div>
-                                        <div className="table-cell text-current text-sm text-center">856</div>
-                                    </div>
-
-                                    <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
-                                        <div className="table-cell text-current text-sm">Politecnico di Torino</div>
-                                        <div className="table-cell text-current text-sm text-center">Turin</div>
-                                        <div className="table-cell text-current text-sm text-center">856</div>
-                                    </div>
-                                    <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
-                                        <div className="table-cell text-current text-sm">Politecnico di Torino</div>
-                                        <div className="table-cell text-current text-sm text-center">Turin</div>
-                                        <div className="table-cell text-current text-sm text-center">856</div>
-                                    </div>
                                     <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
                                         <div className="table-cell text-current text-sm">Politecnico di Torino</div>
                                         <div className="table-cell text-current text-sm text-center">Turin</div>
