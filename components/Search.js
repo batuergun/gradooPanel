@@ -163,10 +163,13 @@ export default function Search(session) {
                     >
                         <h3 className="flex items-center text-base font-medium">{username}</h3>
                         {avatar_url ? (
-                            <img src={avatar_url} alt="Avatar" className="avatar image" />
-                        ) : (<>
-                            <div className="avatar no-image" />
-                        </>
+                            <>
+                                <img src={avatar_url} alt="Avatar" className="avatar image" />
+                            </>
+                        ) : (
+                            <>
+                                <div className="avatar no-image" />
+                            </>
                         )}
                     </div>
                 </div>
@@ -178,16 +181,20 @@ export default function Search(session) {
                             <>
                                 <div className="absolute flex flex-col bg-cardBackground text-fontPrimary rounded-xl p-1 top-[22vh] left-[20vw] z-10 min-w-[20vw] max-h-[35vh] overflow-auto">
 
-                                    {selectedEvents.map(event =>
-                                        <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
-                                            <img className="w-3" src="/img/summary2.svg" />
-                                            <a className="text-current text-sm ml-1">{event.title}</a>
-                                        </div>
+                                    {selectedEvents.map(event => (
+                                        <>
+                                            <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
+                                                <img className="w-3" src="/img/summary2.svg" />
+                                                <a className="text-current text-sm ml-1">{event.title}</a>
+                                            </div>
+                                        </>)
                                     )}
-                                    {events.map(event =>
-                                        <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
-                                            <a className="text-current text-sm ml-1">{event.title}</a>
-                                        </div>
+                                    {events.map(event => (
+                                        <>
+                                            <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
+                                                <a className="text-current text-sm ml-1">{event.title}</a>
+                                            </div>
+                                        </>)
                                     )}
 
                                 </div>
@@ -198,16 +205,21 @@ export default function Search(session) {
                             <>
                                 <div className="absolute flex flex-col bg-cardBackground text-fontPrimary rounded-xl p-1 top-[22vh] left-[35vw] z-10 min-w-[20vw] max-h-[35vh] overflow-auto">
 
-                                    {selectedCities.map(city =>
-                                        <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
-                                            <img className="w-3" src="/img/summary2.svg" />
-                                            <a className="text-current text-sm ml-1">{city.title}</a>
-                                        </div>
+                                    {selectedCities.map(city => (
+                                        <>
+                                            <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
+                                                <img className="w-3" src="/img/summary2.svg" />
+                                                <a className="text-current text-sm ml-1">{city.title}</a>
+                                            </div>
+                                        </>)
                                     )}
-                                    {cities.map(city =>
-                                        <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
-                                            <a className="text-current text-sm ml-1">{city.title}</a>
-                                        </div>
+                                    {cities.map(city => (
+                                        <>
+                                            <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
+                                                <a className="text-current text-sm ml-1">{city.title}</a>
+                                            </div>
+                                        </>
+                                    )
                                     )}
 
                                 </div>
