@@ -98,19 +98,6 @@ export default function TotalApplications() {
         eventlabels.push(eventlist[i].eventid);
         eventtotal.push(eventlist[i].total - eventlist[i].distinct);
         eventdistinct.push(eventlist[i].distinct);
-
-        var timelinecache = [];
-        // Daily application Count
-        for (var t = 0; t < 14; t++) {
-          const gettimeline = async () => {
-            const { data } = await supabase.rpc('eventapplicationcount', { eventname: 'applications', gte: timeline[14 - t], lt: timeline[13 - t] })
-            timelinecache.push(data);
-          }
-          await gettimeline()
-        }
-
-        eventlist[i].timeline = timelinecache;
-        eventtimeline.push(eventlist[i].timeline);
       }
 
       setgraphdata({
