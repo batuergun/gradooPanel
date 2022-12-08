@@ -4,7 +4,7 @@ const https = require("https");
 export default async function reload(req, res) {
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
-  const { data } = await supabase.rpc('countschool', {input : 'erkek'})
+  const { data } = await supabase.rpc('listsearch', {input : 'istanbul'})
   console.log(data)
 
 

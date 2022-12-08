@@ -1,8 +1,8 @@
 import { useSession } from "@supabase/auth-helpers-react";
-import Search from '../components/Search'
+import SchoolSearch from "../components/SchoolSearch";
 
 export default function SearchPage() {
     const session = useSession();
 
-    return <>{!session ? <></> : <Search session={session} />}</>;
+    return <>{!session ? <></> : <SchoolSearch session={session} />}</>;
 }

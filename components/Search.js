@@ -86,7 +86,7 @@ export default function Search(session) {
 
     function Cities() {
 
-        const list = [{ "title": 'Samsun', 'selected': false }, { "title": 'Istanbul', 'selected': true }]
+        const list = [{ "title": 'Ankara', 'selected': false }, { "title": 'Istanbul', 'selected': true }]
         let selected = []
         let unselected = []
 
@@ -106,19 +106,20 @@ export default function Search(session) {
             <div className="sidebar">
                 <h1>Gradoo Panel</h1>
                 <img src="/img/divider.svg" className="divider" />
-                <div
-                    className="section summary"
-                    onClick={() => router.push({ pathname: "/" })}
-                >
+
+                <div className="section summary" onClick={() => router.push({ pathname: "/" })} >
                     <img src="/img/summary.svg" className="icon" />
                     <h2>Summary</h2>
                 </div>
-                <div
-                    className="section query bg-active-menu"
-                    onClick={() => router.push({ pathname: "/search" })}
-                >
+
+                <div className="section query bg-active-menu" onClick={() => router.push({ pathname: "/search" })} >
                     <img src="/img/query.svg" className="icon" />
                     <h2>Search</h2>
+                </div>
+
+                <div className="section query" onClick={() => router.push({ pathname: "/schoolsearch" })} >
+                    <img src="/img/query.svg" className="icon" />
+                    <h2>School Search</h2>
                 </div>
 
                 <div className="section campaigns" campaign-button>
@@ -235,7 +236,7 @@ export default function Search(session) {
 
                     <div className="flex mt-2 p-4">
                         <div className="flex bg-cardBackground p-4 text-fontPrimary rounded-xl">
-                            <p className="text-current font-semibold">158</p>
+                            <p className="text-current font-semibold">0</p>
                             <p className="text-current ml-1"> result(s) found.</p>
                         </div>
                     </div>
@@ -256,9 +257,9 @@ export default function Search(session) {
 
 
                                     <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
-                                        <div className="table-cell text-current text-sm">Politecnico di Torino</div>
-                                        <div className="table-cell text-current text-sm text-center">Turin</div>
-                                        <div className="table-cell text-current text-sm text-center">856</div>
+                                        <div className="table-cell text-current text-sm">School-Data</div>
+                                        <div className="table-cell text-current text-sm text-center">City</div>
+                                        <div className="table-cell text-current text-sm text-center">Application</div>
                                     </div>
 
                                 </div>

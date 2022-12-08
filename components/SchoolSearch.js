@@ -3,6 +3,7 @@ import { useUser, useSupabaseClient, useSession } from "@supabase/auth-helpers-r
 import { useRouter } from "next/router";
 
 import CreatableSelect from 'react-select/creatable';
+import AsyncSelect from 'react-select/async';
 
 export default function SchoolSearch(session) {
     const supabase = useSupabaseClient();
@@ -15,6 +16,7 @@ export default function SchoolSearch(session) {
     const [avatar_url, setAvatarUrl] = useState(null);
 
     const [schools, setSchools] = useState([]);
+    const [search, setSearch] = useState(null);
 
     useEffect(() => {
         getProfile();
@@ -75,7 +77,7 @@ export default function SchoolSearch(session) {
     };
 
     async function filteredOptions(searchvalue) {
-        const { data } = await supabase.rpc('schoolsearch', { input: searchvalue })
+        const { data } = await supabase.rpc('schoollistsearch', { input: searchvalue })
         console.log(data)
         return data
     }
@@ -87,50 +89,80 @@ export default function SchoolSearch(session) {
 
 
 
-    const handleChange = async(selectedOption) => {
+    const handleChange = async (selectedOption) => {
         console.log("handleChange", selectedOption)
 
         async function schoolQuery(input) {
-            //
-            let schoolList = []
-            const { data } = await supabase.rpc('countschool', {input : selectedOption.value})
-            data.forEach(e => {
-                schoolList.push(e)
-            });
+            if (input !== null) {
+                let selectedlist = []
+                let schoolList = []
 
-            setSchools(schoolList)
+                input.forEach(e => {
+                    selectedlist.push(e.value)
+                });
+
+                const { data } = await supabase.rpc('listsearch', { input: selectedlist })
+                console.log('data - ', data)
+
+                data.forEach(e => {
+                    schoolList.push(e)
+                })
+
+                setSchools(schoolList)
+            }
         }
         schoolQuery(selectedOption)
     }
 
     const loadoptions = (searchValue, callback) => {
         setTimeout(() => {
-            const filteredOptions = options.filter(option => {
-                option.label.toLowerCase().includes(searchValue.toLowerCase())
-            })
-            console.log('loadOptions', searchValue, filteredOptions)
-            callback(filteredOptions)
+            console.log('loadOptions', searchValue)
+            //callback(filteredOptions)
         }, 2000)
     }
+
+    async function getlist(input) {
+        let schoolList = []
+        if (input !== null) {
+            const { data } = await supabase.rpc('listsearch', { input: input })
+            console.log('data - ', data)
+            if (data !== null) {
+                data.forEach(e => {
+                    schoolList.push(e.name)
+                })
+                setSearch(schoolList)
+            }
+        }
+        console.log('schoollist', schoolList)
+    }
+
+    // <AsyncSelect cacheOptions isMulti defaultOptions styles={colourStyles} placeholder={'Input...'} loadOptions={promiseOptions} />
+    const promiseOptions = (inputValue) =>
+        new Promise((resolve) => {
+            setTimeout(async () => {
+                resolve(await getlist(inputValue));
+            }, 1000);
+        });
 
     return (
         <>
             <div className="sidebar">
                 <h1>Gradoo Panel</h1>
                 <img src="/img/divider.svg" className="divider" />
-                <div
-                    className="section summary"
-                    onClick={() => router.push({ pathname: "/" })}
-                >
+
+                <div className="section summary" onClick={() => router.push({ pathname: "/" })} >
                     <img src="/img/summary.svg" className="icon" />
                     <h2>Summary</h2>
                 </div>
-                <div
-                    className="section query bg-active-menu"
-                    onClick={() => router.push({ pathname: "/search" })}
-                >
+
+                <div className="section query" onClick={() => router.push({ pathname: "/search" })} >
                     <img src="/img/query.svg" className="icon" />
                     <h2>Search</h2>
+                </div>
+
+                <div className="section query bg-active-menu" onClick={() => router.push({ pathname: "/schoolsearch" })} >
+                    <img src="/img/query.svg" className="icon" />
+                    <h2>School Search</h2>
                 </div>
 
                 <div className="section campaigns" campaign-button>
@@ -177,7 +209,7 @@ export default function SchoolSearch(session) {
                 <div className="flex-col">
                     <div className="w-[50vw] h-10 justify-start px-4">
 
-                        <CreatableSelect isClearable styles={colourStyles} onChange={handleChange} />
+                        <CreatableSelect isClearable isMulti styles={colourStyles} onChange={handleChange} placeholder={'Input...'} />
 
                     </div>
                 </div>
@@ -197,7 +229,7 @@ export default function SchoolSearch(session) {
                                 <div className="table-row">
                                     <p className="table-cell text-fontPrimary text-base">School</p>
                                     <p className="table-cell text-fontPrimary text-base text-center">City</p>
-                                    <p className="table-cell text-fontPrimary text-base text-center">Applications</p>
+                                    <p className="table-cell text-fontPrimary text-base text-center">Type</p>
                                 </div>
                             </div>
 
@@ -205,12 +237,11 @@ export default function SchoolSearch(session) {
 
                                 {schools.map(school =>
                                     <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
-                                        <div className="table-cell text-current text-sm">{school.school}</div>
-                                        <div className="table-cell text-current text-sm"></div>
-                                        <div className="table-cell text-current text-sm text-center">{school.applicationcount}</div>
-                                    </div>)}
-
-
+                                        <div className="table-cell text-current text-sm">{school.name}</div>
+                                        <div className="table-cell text-current text-sm text-center">{school.city}</div>
+                                        <div className="table-cell text-current text-sm text-center">{school.type}</div>
+                                    </div>)
+                                }
                             </div>
 
                         </div>
