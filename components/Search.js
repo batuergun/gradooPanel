@@ -164,8 +164,9 @@ export default function Search(session) {
                         <h3 className="flex items-center text-base font-medium">{username}</h3>
                         {avatar_url ? (
                             <img src={avatar_url} alt="Avatar" className="avatar image" />
-                        ) : (
+                        ) : (<>
                             <div className="avatar no-image" />
+                        </>
                         )}
                     </div>
                 </div>
