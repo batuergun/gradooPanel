@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   --custom-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
@@ -353,10 +357,6 @@ input[disabled] {
   height: 100vh;
 }
 
-.sidebar .summary {
-  background-color: var(--activeMenu);
-}
-
 .viewport {
   height: 75vh;
   padding: 2vw;
@@ -482,7 +482,7 @@ input[disabled] {
 }
 
 .container {
-  flex-basis: 82%;
+  flex-basis: 82% !important;
   height: 100vh;
   color: var(--fontPrimary);
 }
@@ -492,14 +492,14 @@ input[disabled] {
   padding-left: 2vw;
   padding-right: 2vw;
   color: var(--fontPrimary);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: flex !important;
+  align-items: center !important; 
+  justify-content: space-between !important;
 }
 
 .container .header .title {
   margin-top: 1vh;
-  display: flex;
+  display: flex !important;
   font-size: 1.4vw;
 }
 
@@ -516,8 +516,8 @@ input[disabled] {
 .container .header .profile {
   padding: 0.2vw 1vw;
   width: 14%;
-  display: flex;
-  justify-content: space-around;
+  display: flex !important;
+  justify-content: space-around !important;
 }
 
 .container .header .profile:hover {
@@ -529,8 +529,8 @@ input[disabled] {
 
 .container .header .profile h3 {
   color: var(--fontPrimary);
-  font-size: 1vw;
-  font-weight: 500;
+  font-size: 1vw !important;
+  font-weight: 500 !important;
 }
 
 .container .header .profile img {

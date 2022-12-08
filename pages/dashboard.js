@@ -25,6 +25,7 @@ ChartJS.register(
   Legend
 );
 
+import Sidebar from '../components/Sidebar'
 import TotalApplications from "../components/TotalApplications.js";
 import Timeline from "../components/Timeline";
 
@@ -94,7 +95,7 @@ export default function Dashboard(session) {
         <h1>Gradoo Panel</h1>
         <img src="/img/divider.svg" className="divider" />
         <div
-          className="section summary"
+          className="section summary bg-active-menu"
           onClick={() => router.push({ pathname: "/" })}
         >
           <img src="/img/summary.svg" className="icon" />
@@ -141,13 +142,13 @@ export default function Dashboard(session) {
         <div className="header">
           <div className="title">
             <img src="/img/summary2.svg" />
-            <h2>Summary</h2>
+            <h2 className="flex items-center text-lg font-medium">Summary</h2>
           </div>
           <div
             className="profile"
             onClick={() => router.push({ pathname: "/account" })}
           >
-            <h3>{username}</h3>
+            <h3 className="flex items-center text-base font-medium">{username}</h3>
             {avatarUrl ? (
               <img src={avatarUrl} alt="Avatar" className="avatar image" />
             ) : (

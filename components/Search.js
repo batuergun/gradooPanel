@@ -72,7 +72,7 @@ export default function Search(session) {
                     <h2>Summary</h2>
                 </div>
                 <div
-                    className="section query"
+                    className="section query bg-active-menu"
                     onClick={() => router.push({ pathname: "/search" })}
                 >
                     <img src="/img/query.svg" className="icon" />
@@ -112,13 +112,13 @@ export default function Search(session) {
                 <div className="header">
                     <div className="title">
                         <img src="/img/summary2.svg" />
-                        <h2>Search</h2>
+                        <h2 className="flex items-center text-lg font-medium">Search</h2>
                     </div>
                     <div
                         className="profile"
                         onClick={() => router.push({ pathname: "/account" })}
                     >
-                        <h3>{username}</h3>
+                        <h3 className="flex items-center text-base font-medium">{username}</h3>
                         {avatar_url ? (
                             <img src={avatar_url} alt="Avatar" className="avatar image" />
                         ) : (
