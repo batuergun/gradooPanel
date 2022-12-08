@@ -12,6 +12,9 @@ export default function Search(session) {
     const [username, setUsername] = useState(null);
     const [avatar_url, setAvatarUrl] = useState(null);
 
+    const [eventMenu, seteventMenu] = useState(false)
+    const [cityMenu, setcityMenu] = useState(false)
+
     useEffect(() => {
         getProfile();
     }, [session]);
@@ -57,6 +60,45 @@ export default function Search(session) {
         } catch (error) {
             console.log("Error downloading image: ", error);
         }
+    }
+
+
+    let [events, selectedEvents] = Events()
+
+    function Events() {
+
+        const eventlist = [{ "title": 'Learn How to Learn', 'selected': false }, { "title": 'data test', 'selected': true }]
+        let selected = []
+        let unselected = []
+
+        eventlist.forEach(event => {
+            if (event.selected) {
+                selected.push(event)
+            } else {
+                unselected.push(event)
+            }
+        });
+
+        return [unselected, selected]
+    }
+
+    let [cities, selectedCities] = Cities()
+
+    function Cities() {
+
+        const list = [{ "title": 'Samsun', 'selected': false }, { "title": 'Istanbul', 'selected': true }]
+        let selected = []
+        let unselected = []
+
+        list.forEach(city => {
+            if (city.selected) {
+                selected.push(city)
+            } else {
+                unselected.push(city)
+            }
+        });
+
+        return [unselected, selected]
     }
 
     return (
@@ -130,12 +172,48 @@ export default function Search(session) {
                 <div className="flex-col">
                     <div className="flex w-full h-10 justify-around grow px-3">
 
+                        {!eventMenu ? (<></>) : (
+                            <div className="absolute flex flex-col bg-cardBackground text-fontPrimary rounded-xl p-1 top-[22vh] left-[20vw] z-10 min-w-[20vw] max-h-[35vh] overflow-auto">
+
+                                {selectedEvents.map(event =>
+                                    <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
+                                        <img className="w-3" src="/img/summary2.svg" />
+                                        <a className="text-current text-sm ml-1">{event.title}</a>
+                                    </div>
+                                )}
+                                {events.map(event =>
+                                    <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
+                                        <a className="text-current text-sm ml-1">{event.title}</a>
+                                    </div>
+                                )}
+
+                            </div>
+                        )}
+
+                        {!cityMenu ? (<></>) : (
+                            <div className="absolute flex flex-col bg-cardBackground text-fontPrimary rounded-xl p-1 top-[22vh] left-[35vw] z-10 min-w-[20vw] max-h-[35vh] overflow-auto">
+
+                                {selectedCities.map(city =>
+                                    <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
+                                        <img className="w-3" src="/img/summary2.svg" />
+                                        <a className="text-current text-sm ml-1">{city.title}</a>
+                                    </div>
+                                )}
+                                {cities.map(city =>
+                                    <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
+                                        <a className="text-current text-sm ml-1">{city.title}</a>
+                                    </div>
+                                )}
+
+                            </div>
+                        )}
+
                         <div className="flex bg-cardBackground rounded-xl">
-                            <input className="bg-transparent text-fontPrimary text-sm border-0" placeholder="Event"></input>
+                            <input className="bg-transparent text-fontPrimary text-sm border-0" placeholder="Event" onClick={() => { seteventMenu(!eventMenu) }}></input>
                         </div>
 
                         <div className="flex bg-cardBackground rounded-xl">
-                            <input className="bg-transparent text-fontPrimary text-sm border-0" placeholder="City"></input>
+                            <input className="bg-transparent text-fontPrimary text-sm border-0" placeholder="City" onClick={() => { setcityMenu(!cityMenu) }}></input>
                         </div>
 
                         <div className="flex bg-cardBackground rounded-xl">

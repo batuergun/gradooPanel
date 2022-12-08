@@ -94,17 +94,13 @@ export default function Dashboard(session) {
       <div className="sidebar">
         <h1>Gradoo Panel</h1>
         <img src="/img/divider.svg" className="divider" />
-        <div
-          className="section summary bg-active-menu"
-          onClick={() => router.push({ pathname: "/" })}
-        >
+
+        <div className="section summary bg-active-menu" onClick={() => router.push({ pathname: "/" })} >
           <img src="/img/summary.svg" className="icon" />
           <h2>Summary</h2>
         </div>
-        <div
-          className="section query"
-          onClick={() => router.push({ pathname: "/search" })}
-        >
+        
+        <div className="section query" onClick={() => router.push({ pathname: "/search" })} >
           <img src="/img/query.svg" className="icon" />
           <h2>Search</h2>
         </div>
