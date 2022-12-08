@@ -248,12 +248,12 @@ export default function SchoolSearch(session) {
 
                             <div class="table-row-group">
 
-                                {schools.map(school =>
+                                {schools.map(school => (<>
                                     <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
                                         <div className="table-cell text-current text-sm">{school.name}</div>
                                         <div className="table-cell text-current text-sm text-center">{school.city}</div>
                                         <div className="table-cell text-current text-sm text-center">{school.type}</div>
-                                    </div>)
+                                    </div></>))
                                 }
                             </div>
 
