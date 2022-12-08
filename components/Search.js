@@ -18,46 +18,46 @@ export default function Search(session) {
 
     async function getProfile() {
         try {
-          setLoading(true);
-          if (!user) throw new Error("No user");
-    
-          let { data, error, status } = await supabase
-            .from("profiles")
-            .select(`username, avatar_url`)
-            .eq("id", user.id)
-            .single();
-    
-          if (error && status !== 406) {
-            throw error;
-          }
-    
-          if (data) {
-            setUsername(data.username);
-            setAvatarUrl(data.avatar_url);
-            downloadImage(data.avatar_url);
-          }
+            setLoading(true);
+            if (!user) throw new Error("No user");
+
+            let { data, error, status } = await supabase
+                .from("profiles")
+                .select(`username, avatar_url`)
+                .eq("id", user.id)
+                .single();
+
+            if (error && status !== 406) {
+                throw error;
+            }
+
+            if (data) {
+                setUsername(data.username);
+                setAvatarUrl(data.avatar_url);
+                downloadImage(data.avatar_url);
+            }
         } catch (error) {
-          alert("Error loading user data!");
-          console.log(error);
+            alert("Error loading user data!");
+            console.log(error);
         } finally {
-          setLoading(false);
+            setLoading(false);
         }
-      }
+    }
 
     async function downloadImage(path) {
         try {
-          const { data, error } = await supabase.storage
-            .from("avatars")
-            .download(path);
-          if (error) {
-            throw error;
-          }
-          const url = URL.createObjectURL(data);
-          setAvatarUrl(url);
+            const { data, error } = await supabase.storage
+                .from("avatars")
+                .download(path);
+            if (error) {
+                throw error;
+            }
+            const url = URL.createObjectURL(data);
+            setAvatarUrl(url);
         } catch (error) {
-          console.log("Error downloading image: ", error);
+            console.log("Error downloading image: ", error);
         }
-      }
+    }
 
     return (
         <>
@@ -127,9 +127,75 @@ export default function Search(session) {
                     </div>
                 </div>
 
-                <div className="viewport">
+                <div className="flex flex-col grow items-stretch">
+                    <div className="flex h-10 w-[100%] justify-around grow p-3">
+                        <input className="bg-cardBackground shadow-sm rounded-xl text-primary m-1 p-5 border-0" placeholder="Event"></input>
+                        <input className="bg-cardBackground shadow-sm rounded-xl text-primary m-1 p-5 border-0" placeholder="City"></input>
+                        <input className="bg-cardBackground shadow-sm rounded-xl text-primary m-1 p-5 border-0" placeholder="School"></input>
+                        <input className="bg-cardBackground shadow-sm rounded-xl text-primary m-1 p-5 border-0" placeholder="Usertype"></input>
+                        <button className="bg-activeMenu rounded-xl text-fontSecondary m-1 p-5 border-0"></button>
+                    </div>
+
+                    <div className="flex mt-5 p-4">
+                        <div className="p-3 bg-cardBackground w-full h-[70vh] rounded-2xl overflow-auto">
+                            <div className="table w-full">
+
+                                <div className="table-header-group">
+                                    <div className="table-row">
+                                        <p className="table-cell text-fontPrimary text-base">School</p>
+                                        <p className="table-cell text-fontPrimary text-base text-center">City</p>
+                                        <p className="table-cell text-fontPrimary text-base text-center">Applications</p>
+                                    </div>
+                                </div>
+
+                                <div class="table-row-group">
+
+
+
+                                    <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
+                                        <div className="table-cell text-current text-sm">Politecnico di Torino</div>
+                                        <div className="table-cell text-current text-sm text-center">Turin</div>
+                                        <div className="table-cell text-current text-sm text-center">856</div>
+                                    </div>
+                                    <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
+                                        <div className="table-cell text-current text-sm">Politecnico di Torino</div>
+                                        <div className="table-cell text-current text-sm text-center">Turin</div>
+                                        <div className="table-cell text-current text-sm text-center">856</div>
+                                    </div>
+                                    <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
+                                        <div className="table-cell text-current text-sm">Politecnico di Torino</div>
+                                        <div className="table-cell text-current text-sm text-center">Turin</div>
+                                        <div className="table-cell text-current text-sm text-center">856</div>
+                                    </div> <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
+                                        <div className="table-cell text-current text-sm">Politecnico di Torino</div>
+                                        <div className="table-cell text-current text-sm text-center">Turin</div>
+                                        <div className="table-cell text-current text-sm text-center">856</div>
+                                    </div>
+
+                                    <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
+                                        <div className="table-cell text-current text-sm">Politecnico di Torino</div>
+                                        <div className="table-cell text-current text-sm text-center">Turin</div>
+                                        <div className="table-cell text-current text-sm text-center">856</div>
+                                    </div>
+                                    <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
+                                        <div className="table-cell text-current text-sm">Politecnico di Torino</div>
+                                        <div className="table-cell text-current text-sm text-center">Turin</div>
+                                        <div className="table-cell text-current text-sm text-center">856</div>
+                                    </div>
+                                    <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
+                                        <div className="table-cell text-current text-sm">Politecnico di Torino</div>
+                                        <div className="table-cell text-current text-sm text-center">Turin</div>
+                                        <div className="table-cell text-current text-sm text-center">856</div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
+
             </div>
         </>
     );
