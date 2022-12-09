@@ -338,7 +338,7 @@ export default function Search(session) {
 
                     <div className="flex mt-2 p-4">
                         <div className="flex bg-cardBackground p-4 text-fontPrimary rounded-xl">
-                            <p className="text-current font-semibold">0</p>
+                            <p className="text-current font-semibold">{schools.length}</p>
                             <p className="text-current ml-1"> result(s) found.</p>
                         </div>
                     </div>
