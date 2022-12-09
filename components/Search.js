@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useUser, useSupabaseClient, useSession } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 
+import CreatableSelect from 'react-select/creatable';
+
 export default function Search(session) {
     const supabase = useSupabaseClient();
     const user = useUser();
@@ -12,8 +14,8 @@ export default function Search(session) {
     const [username, setUsername] = useState(null);
     const [avatar_url, setAvatarUrl] = useState(null);
 
-    const [eventMenu, seteventMenu] = useState(false)
-    const [cityMenu, setcityMenu] = useState(false)
+    const [query, setQuery] = useState([])
+    const [schools, setSchools] = useState([])
 
     useEffect(() => {
         getProfile();
@@ -62,43 +64,141 @@ export default function Search(session) {
         }
     }
 
+    const colourStyles = {
+        option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+            return {
+                ...styles,
+                backgroundColor: isFocused ? "#999999" : null,
+                color: "#333333"
+            };
+        },
+        container: base => ({
+            ...base,
+            flex: 1,
+            padding: '.5rem',
+        })
+    };
 
-    let [events, selectedEvents] = Events([])
+    const eventoptions = [
+        { value: 'Learn How to Learn', label: 'Learn How to Learn' },
+        { value: 'data test', label: 'data test' },
+    ]
 
-    function Events() {
+    const cityoptions = [
+        { value: 'Istanbul', label: 'Istanbul' },
+        { value: 'Ankara', label: 'Ankara' },
+        { value: 'Izmir', label: 'Izmir' },
+    ]
 
-        const eventlist = [{ "title": 'Learn How to Learn', 'selected': false }, { "title": 'data test', 'selected': true }]
-        let selected = []
-        let unselected = []
+    const classoptions = [
+        { value: 'Hazırlık (Lise)', label: 'Learn How to Learn' },
+        { value: '9', label: '9' },
+        { value: '10', label: '10' },
+        { value: '11', label: '11' },
+        { value: '12', label: '12' },
+        { value: 'Hazırlık (Üniversite)', label: 'Hazırlık (Üniversite)' },
+        { value: '1. sınıf', label: '1. sınıf' },
+        { value: '2. sınıf', label: '2. sınıf' },
+        { value: '3. sınıf', label: '3. sınıf' },
+        { value: '4. sınıf', label: '4. sınıf' },
+    ]
 
-        eventlist.forEach(event => {
-            if (event.selected) {
-                selected.push(event)
-            } else {
-                unselected.push(event)
-            }
+    // const usertypeoptions = [
+    //     { value: 'Lise', label: 'Lise' },
+    //     { value: 'Üniversite', label: 'Üniversite' },
+    //     { value: 'Diğer', label: 'Diğer' },
+    // ]
+
+    const usertypeoptions = [
+        { value: 'High', label: 'High School' },
+        { value: 'University', label: 'University' }
+    ]
+
+    const eventchange = (input) => {
+        let eventlist = []
+
+        input.forEach(i => {
+            eventlist.push(i.value)
         });
 
-        return [unselected, selected]
+        setQuery(query => ({ ...query, events: eventlist }))
     }
 
-    let [cities, selectedCities] = Cities()
+    const citychange = async (input) => {
+        let citylist = []
 
-    function Cities() {
-
-        const list = [{ "title": 'Ankara', 'selected': false }, { "title": 'Istanbul', 'selected': true }]
-        let selected = []
-        let unselected = []
-
-        list.forEach(city => {
-            if (city.selected) {
-                selected.push(city)
-            } else {
-                unselected.push(city)
-            }
+        input.forEach(i => {
+            citylist.push(i.value)
         });
 
-        return [unselected, selected]
+        setQuery(query => ({ ...query, cities: citylist }))
+    }
+
+    const schoolchange = async (input) => {
+        let schoollist = []
+
+        input.forEach(i => {
+            schoollist.push(i.value)
+        });
+
+        setQuery(query => ({ ...query, schools: schoollist }))
+
+    }
+
+    const usertypechange = async (input) => {
+        let usertypes = []
+
+        input.forEach(i => {
+            usertypes.push(i.value)
+        });
+
+        setQuery(query => ({ ...query, types: usertypes }))
+    }
+
+    const search = async () => {
+        //console.log(query)
+
+        async function fullquery() {
+            if (query !== null) {
+                let resultList = []
+                let schoollist = []
+                let citylist = []
+                let typelist = []
+
+                if (query.cities !== undefined) {
+                    query.cities.forEach(e => {
+                        citylist.push(e)
+                    });
+                }
+
+                if (query.schools !== undefined) {
+                    query.schools.forEach(e => {
+                        schoollist.push(e)
+                    });
+                }
+
+                if (query.types !== undefined) {
+                    query.types.forEach(e => {
+                        typelist.push(e)
+                    });
+                }
+
+                console.log(query, schoollist, citylist, typelist)
+
+                const { data, error} = await supabase.rpc('fullsearch', { schoolinput: schoollist, cityinput: citylist, typeinput: typelist })
+
+                console.log(error)
+
+                if (data !== null) {
+                    data.forEach(e => {
+                        resultList.push(e)
+                    })
+                    setSchools(resultList)
+                }
+
+            }
+        }
+        fullquery()
     }
 
     return (
@@ -175,80 +275,28 @@ export default function Search(session) {
                 </div>
 
                 <div className="flex-col">
-                    <div className="flex w-full h-10 justify-around grow px-3">
+                    <div className="flex w-full h-10 justify-evenly grow px-3">
 
-                        {!eventMenu ? (<></>) : (
-                            <>
-                                <div className="absolute flex flex-col bg-cardBackground text-fontPrimary rounded-xl p-1 top-[22vh] left-[20vw] z-10 min-w-[20vw] max-h-[35vh] overflow-auto">
-
-                                    {selectedEvents.map(event => (
-                                        <>
-                                            <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
-                                                <img className="w-3" src="/img/summary2.svg" />
-                                                <a className="text-current text-sm ml-1">{event.title}</a>
-                                            </div>
-                                        </>)
-                                    )}
-                                    {events.map(event => (
-                                        <>
-                                            <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
-                                                <a className="text-current text-sm ml-1">{event.title}</a>
-                                            </div>
-                                        </>)
-                                    )}
-
-                                </div>
-                            </>
-                        )}
-
-                        {!cityMenu ? (<></>) : (
-                            <>
-                                <div className="absolute flex flex-col bg-cardBackground text-fontPrimary rounded-xl p-1 top-[22vh] left-[35vw] z-10 min-w-[20vw] max-h-[35vh] overflow-auto">
-
-                                    {selectedCities.map(city => (
-                                        <>
-                                            <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
-                                                <img className="w-3" src="/img/summary2.svg" />
-                                                <a className="text-current text-sm ml-1">{city.title}</a>
-                                            </div>
-                                        </>)
-                                    )}
-                                    {cities.map(city => (
-                                        <>
-                                            <div className="flex text-current p-1 hover:bg-dropShadow hover:text-fontSecondary rounded-xl hover:cursor-pointer">
-                                                <a className="text-current text-sm ml-1">{city.title}</a>
-                                            </div>
-                                        </>
-                                    )
-                                    )}
-
-                                </div>
-                            </>
-                        )}
-
-                        <div className="flex bg-cardBackground rounded-xl">
-                            <input className="bg-transparent text-fontPrimary text-sm border-0" placeholder="Event" onClick={() => { seteventMenu(!eventMenu) }}></input>
+                        <div className="flex grow">
+                            <CreatableSelect isClearable isMulti styles={colourStyles} placeholder={'Event'} options={eventoptions} onChange={eventchange} />
                         </div>
 
-                        <div className="flex bg-cardBackground rounded-xl">
-                            <input className="bg-transparent text-fontPrimary text-sm border-0" placeholder="City" onClick={() => { setcityMenu(!cityMenu) }}></input>
+                        <div className="flex grow">
+                            <CreatableSelect isClearable isMulti styles={colourStyles} placeholder={'City'} options={cityoptions} onChange={citychange} />
                         </div>
 
-                        <div className="flex bg-cardBackground rounded-xl">
-                            <input className="bg-transparent text-fontPrimary text-sm border-0" placeholder="School"></input>
+                        <div className="flex grow">
+                            <CreatableSelect isClearable isMulti styles={colourStyles} placeholder={'School'} onChange={schoolchange} />
                         </div>
 
-                        <div className="flex bg-cardBackground rounded-xl">
-                            <input className="bg-transparent text-fontPrimary text-sm border-0" placeholder="Usertype"></input>
+                        <div className="flex grow">
+                            <CreatableSelect isClearable isMulti styles={colourStyles} placeholder={'Usertype'} options={usertypeoptions} onChange={usertypechange} />
                         </div>
 
-                        <div className="flex bg-cardBackground rounded-xl">
-                            <input className="bg-transparent text-fontPrimary text-sm border-0" placeholder="Class"></input>
+                        <div className="flex bg-activeMenu rounded-xl text-fontSecondary w-10  h-10 mt-1 justify-center hover:cursor-pointer hover:bg-dropShadow" onClick={search}>
+                            <img src="/img/query.svg" className="w-4" />
                         </div>
 
-                        <div className="flex bg-activeMenu rounded-xl text-fontSecondary w-10 justify-center hover:cursor-pointer hover:bg-dropShadow">
-                            <img src="/img/query.svg" className="w-5" />
-                        </div>
                     </div>
 
                     <div className="flex mt-2 p-4">
@@ -272,12 +320,16 @@ export default function Search(session) {
 
                                 <div class="table-row-group">
 
+                                    {schools.map(school => (
+                                        <>
+                                            <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
+                                                <div className="table-cell text-current text-sm">{school.name}</div>
+                                                <div className="table-cell text-current text-sm text-center">{school.city}</div>
+                                                <div className="table-cell text-current text-sm text-center">{school.type}</div>
+                                            </div>
+                                        </>
+                                    ))}
 
-                                    <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
-                                        <div className="table-cell text-current text-sm">School-Data</div>
-                                        <div className="table-cell text-current text-sm text-center">City</div>
-                                        <div className="table-cell text-current text-sm text-center">Application</div>
-                                    </div>
 
                                 </div>
 
