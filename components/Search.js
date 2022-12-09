@@ -111,8 +111,9 @@ export default function Search(session) {
     // ]
 
     const usertypeoptions = [
-        { value: 'High', label: 'High School' },
-        { value: 'University', label: 'University' }
+        { value: 'lise', label: 'High School' },
+        { value: 'üniversite', label: 'University' },
+        { value: 'diğer', label: 'Other' }
     ]
 
     const eventchange = (input) => {
@@ -244,7 +245,7 @@ export default function Search(session) {
                 }
 
 
-                const { data, error } = await supabase.rpc('fullsearch', { input: searchstring.substring(0, searchstring.length - 3) })
+                const { data, error } = await supabase.rpc('renderschoollist', { input: searchstring.substring(0, searchstring.length - 3) })
                 console.log(error)
 
                 console.log('querystring - ', searchstring.substring(0, searchstring.length - 3))
@@ -275,11 +276,6 @@ export default function Search(session) {
                 <div className="section query bg-active-menu" onClick={() => router.push({ pathname: "/search" })} >
                     <img src="/img/query.svg" className="icon" />
                     <h2>Search</h2>
-                </div>
-
-                <div className="section query" onClick={() => router.push({ pathname: "/schoolsearch" })} >
-                    <img src="/img/query.svg" className="icon" />
-                    <h2>School Search</h2>
                 </div>
 
                 <div className="section campaigns" campaign-button>
@@ -373,8 +369,8 @@ export default function Search(session) {
                                 <div className="table-header-group">
                                     <div className="table-row">
                                         <p className="table-cell text-fontPrimary text-base">School</p>
-                                        <p className="table-cell text-fontPrimary text-base text-center">City</p>
                                         <p className="table-cell text-fontPrimary text-base text-center">Applications</p>
+                                        <p className="table-cell text-fontPrimary text-base text-center">City</p>
                                     </div>
                                 </div>
 
@@ -384,8 +380,8 @@ export default function Search(session) {
                                         <>
                                             <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
                                                 <div className="table-cell text-current text-sm">{school.name}</div>
+                                                <div className="table-cell text-current text-sm text-center">{school.count}</div>
                                                 <div className="table-cell text-current text-sm text-center">{school.city}</div>
-                                                <div className="table-cell text-current text-sm text-center">{school.type}</div>
                                             </div>
                                         </>
                                     ))}

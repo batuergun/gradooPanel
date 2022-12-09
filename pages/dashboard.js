@@ -104,11 +104,6 @@ export default function Dashboard(session) {
           <img src="/img/query.svg" className="icon" />
           <h2>Search</h2>
         </div>
-        
-        <div className="section query" onClick={() => router.push({ pathname: "/schoolsearch" })} >
-          <img src="/img/query.svg" className="icon" />
-          <h2>School Search</h2>
-        </div>
 
         <div className="section campaigns" campaign-button>
           <img src="/img/summary.svg" className="icon" />
