@@ -164,49 +164,9 @@ export default function Search(session) {
                 let resultList = []
                 let searchstring = ""
 
-
-                if (query.events != undefined) {
-                    if (query.events.length != 0) {
-                        for (let i = 0; i < query.events.length; i++) {
-                            if (i > 0 && i < query.events.length + 1) {
-                                searchstring = searchstring.concat(' | ', JSON.stringify(query.events[i]))
-                            } else {
-                                searchstring = searchstring.concat(JSON.stringify(query.events[i]))
-                            }
-                        }
-                        searchstring = searchstring.concat(" & ")
-                    }
-                }
-
-                if (query.cities != undefined) {
-                    if (query.cities.length != 0) {
-                        console.log(query.cities)
-                        for (let i = 0; i < query.cities.length; i++) {
-                            if (i > 0 && i < query.cities.length + 1) {
-                                searchstring = searchstring.concat(' | ', JSON.stringify(query.cities[i]))
-                            } else {
-                                searchstring = searchstring.concat(JSON.stringify(query.cities[i]))
-                            }
-                        }
-                        searchstring = searchstring.concat(" & ")
-                    }
-                }
-
-                if (query.schools != undefined) {
-                    if (query.schools.length != 0) {
-                        for (let i = 0; i < query.schools.length; i++) {
-                            if (i > 0 && i < query.schools.length + 1) {
-                                searchstring = searchstring.concat(' | ', JSON.stringify(query.schools[i]))
-                            } else {
-                                searchstring = searchstring.concat(JSON.stringify(query.schools[i]))
-                            }
-                        }
-                        searchstring = searchstring.concat(" & ")
-                    }
-                }
-
                 if (query.types != undefined) {
                     if (query.types.length != 0) {
+                        searchstring = searchstring.concat("( ")
                         for (let i = 0; i < query.types.length; i++) {
                             if (i > 0 && i < query.types.length + 1) {
                                 searchstring = searchstring.concat(' | ', JSON.stringify(query.types[i]))
@@ -214,11 +174,53 @@ export default function Search(session) {
                                 searchstring = searchstring.concat(JSON.stringify(query.types[i]))
                             }
                         }
-                        searchstring = searchstring.concat(" & ")
+                        searchstring = searchstring.concat(" ) & ")
                     }
                 }
 
-                console.log('searchstring', searchstring.substring(0, searchstring.length - 3))
+                if (query.events != undefined) {
+                    if (query.events.length != 0) {
+                        searchstring = searchstring.concat("( ")
+                        for (let i = 0; i < query.events.length; i++) {
+                            if (i > 0 && i < query.events.length + 1) {
+                                searchstring = searchstring.concat(' | ', JSON.stringify(query.events[i]))
+                            } else {
+                                searchstring = searchstring.concat(JSON.stringify(query.events[i]))
+                            }
+                        }
+                        searchstring = searchstring.concat(" ) & ")
+                    }
+                }
+
+                if (query.cities != undefined) {
+                    if (query.cities.length != 0) {
+                        searchstring = searchstring.concat("( ")
+                        for (let i = 0; i < query.cities.length; i++) {
+                            if (i > 0 && i < query.cities.length + 1) {
+                                searchstring = searchstring.concat(' | ', JSON.stringify(query.cities[i]))
+                            } else {
+                                searchstring = searchstring.concat(JSON.stringify(query.cities[i]))
+                            }
+                        }
+                        searchstring = searchstring.concat(" ) & ")
+                    }
+                }
+
+                if (query.schools != undefined) {
+                    if (query.schools.length != 0) {
+                        searchstring = searchstring.concat("( ")
+                        for (let i = 0; i < query.schools.length; i++) {
+                            if (i > 0 && i < query.schools.length + 1) {
+                                searchstring = searchstring.concat(' | ', JSON.stringify(query.schools[i]))
+                            } else {
+                                searchstring = searchstring.concat(JSON.stringify(query.schools[i]))
+                            }
+                        }
+                        searchstring = searchstring.concat(" ) & ")
+                    }
+                }
+
+
 
                 const { data, error } = await supabase.rpc('fullsearch', { input: searchstring.substring(0, searchstring.length - 3) })
 
