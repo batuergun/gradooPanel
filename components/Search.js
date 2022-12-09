@@ -236,13 +236,13 @@ export default function Search(session) {
                             if (i > 0 && i < query.schools.length + 1) {
                                 let splitted = ''
                                 if (JSON.stringify(query.schools[i]).includes(' ')) {
-                                    splitted = JSON.stringify(query.schools[i]).replaceAll(' ', ' | ')
-                                    searchstring = searchstring.concat(' | ', splitted)
+                                    splitted = JSON.stringify(query.schools[i]).replaceAll(' ', ' & ')
+                                    searchstring = searchstring.concat(' & ', splitted)
                                 } else { searchstring = searchstring.concat(JSON.stringify(query.schools[i])) }
                             } else {
                                 let splitted = ''
                                 if (JSON.stringify(query.schools[i]).includes(' ')) {
-                                    splitted = JSON.stringify(query.schools[i]).replaceAll(' ', ' | ')
+                                    splitted = JSON.stringify(query.schools[i]).replaceAll(' ', ' & ')
                                     searchstring = searchstring.concat(splitted)
                                 } else { searchstring = searchstring.concat(JSON.stringify(query.schools[i])) }
                             }
