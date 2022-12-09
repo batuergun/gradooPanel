@@ -223,18 +223,18 @@ export default function Search(session) {
 
                 if (query.schools != undefined) {
                     if (query.schools.length != 0) {
-                        searchstring = searchstring.concat("( ")
+                        searchstring = searchstring.concat("(")
                         for (let i = 0; i < query.schools.length; i++) {
                             if (i > 0 && i < query.schools.length + 1) {
                                 let splitted = ''
                                 if (JSON.stringify(query.schools[i]).includes(' ')) {
-                                    splitted = JSON.stringify(query.schools[i]).replace(' ', ' | ')
+                                    splitted = JSON.stringify(query.schools[i]).replaceAll(' ', ' | ')
                                     searchstring = searchstring.concat(' | ', splitted)
-                                } else { searchstring = searchstring.concat(' | ', JSON.stringify(query.schools[i])) }
+                                } else { searchstring = searchstring.concat(JSON.stringify(query.schools[i])) }
                             } else {
                                 let splitted = ''
                                 if (JSON.stringify(query.schools[i]).includes(' ')) {
-                                    splitted = JSON.stringify(query.schools[i]).replace(' ', ' | ')
+                                    splitted = JSON.stringify(query.schools[i]).replaceAll(' ', ' | ')
                                     searchstring = searchstring.concat(splitted)
                                 } else { searchstring = searchstring.concat(JSON.stringify(query.schools[i])) }
                             }
