@@ -172,6 +172,13 @@ export default async function reload(req, res) {
           citystring = citystring.concat(highschool_city)
         }
 
+        let schoolclass = ''
+        if (highschool_class.length > 1) {
+          schoolclass = highschool_class
+        } else if (university_class.length > 1) {
+          schoolclass = highschool_class
+        }
+
         console.log(counter, 'string - ', searchstring, 'data - ', data)
 
         usercache = [...usercache, {
@@ -183,7 +190,8 @@ export default async function reload(req, res) {
           school: schoolquery,
           event: event,
           submitted_at: submitted_at,
-          city: citystring
+          city: citystring,
+          class: schoolclass
         }]
 
         counter += 1

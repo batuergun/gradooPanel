@@ -73,7 +73,6 @@ export default async function webhookReceiver(req, res) {
     });
 
     let searchstring = ''
-
     if (school != " ") {
         let splitted = ''
         if (JSON.stringify(school).includes(' ')) {
@@ -104,6 +103,13 @@ export default async function webhookReceiver(req, res) {
         citystring = citystring.concat(highschool_city)
     }
 
+    let schoolclass = ''
+    if (highschool_class.length > 1) {
+        schoolclass = highschool_class
+    } else if (university_class.length > 1) {
+        schoolclass = highschool_class
+    }
+
     console.log('string - ', searchstring, 'data - ', data)
 
     const { error } = await supabase
@@ -115,9 +121,10 @@ export default async function webhookReceiver(req, res) {
             email: email,
             usertype: usertype,
             school: schoolquery,
-            event: event,
+            event: eventID,
             submitted_at: submitted_at,
-            city: citystring
+            city: citystring,
+            class: schoolclass
         })
 
     res.status(200)
