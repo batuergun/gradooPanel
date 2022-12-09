@@ -156,6 +156,20 @@ export default function Search(session) {
         setQuery(query => ({ ...query, types: usertypes }))
     }
 
+    function wordSplit(splitinput) {
+        let returnstring = '( '
+        if (JSON.stringify(splitinput2).indexOf(" ") >= 0) {
+
+            let words = JSON.stringify(splitinput2).split(" ")
+            words.forEach(w => {
+                returnstring = returnstring.concat(JSON.stringify(w), ' |')
+            });
+            returnstring = returnstring.substring(0, returnstring.length - 1, ')')
+
+        }
+        return returnstring
+    }
+
     const search = async () => {
         //console.log(query)
 
@@ -185,6 +199,7 @@ export default function Search(session) {
                             if (i > 0 && i < query.events.length + 1) {
                                 searchstring = searchstring.concat(' | ', JSON.stringify(query.events[i]))
                             } else {
+                                console.log(splitted)
                                 searchstring = searchstring.concat(JSON.stringify(query.events[i]))
                             }
                         }
@@ -211,9 +226,17 @@ export default function Search(session) {
                         searchstring = searchstring.concat("( ")
                         for (let i = 0; i < query.schools.length; i++) {
                             if (i > 0 && i < query.schools.length + 1) {
-                                searchstring = searchstring.concat(' | ', JSON.stringify(query.schools[i]))
+                                let splitted = ''
+                                if (JSON.stringify(query.schools[i]).includes(' ')) {
+                                    splitted = JSON.stringify(query.schools[i]).replace(' ', ' | ')
+                                    searchstring = searchstring.concat(' | ', splitted)
+                                } else { searchstring = searchstring.concat(' | ', JSON.stringify(query.schools[i])) }
                             } else {
-                                searchstring = searchstring.concat(JSON.stringify(query.schools[i]))
+                                let splitted = ''
+                                if (JSON.stringify(query.schools[i]).includes(' ')) {
+                                    splitted = JSON.stringify(query.schools[i]).replace(' ', ' | ')
+                                    searchstring = searchstring.concat(splitted)
+                                } else { searchstring = searchstring.concat(JSON.stringify(query.schools[i])) }
                             }
                         }
                         searchstring = searchstring.concat(" ) & ")
@@ -221,8 +244,8 @@ export default function Search(session) {
                 }
 
 
-
                 const { data, error } = await supabase.rpc('fullsearch', { input: searchstring.substring(0, searchstring.length - 3) })
+                console.log(error)
 
                 console.log('querystring - ', searchstring.substring(0, searchstring.length - 3))
 
