@@ -3,6 +3,7 @@ import { useUser, useSupabaseClient, useSession } from "@supabase/auth-helpers-r
 import { useRouter } from "next/router";
 
 import CreatableSelect from 'react-select/creatable';
+import Select from 'react-select';
 
 export default function Search(session) {
     const supabase = useSupabaseClient();
@@ -161,33 +162,35 @@ export default function Search(session) {
         async function fullquery() {
             if (query !== null) {
                 let resultList = []
-                let schoollist = []
-                let citylist = []
-                let typelist = []
+                let searchstring = ""
 
-                if (query.cities !== undefined) {
+                if (query.events != undefined) {
+                    query.events.forEach(e => {
+                        searchstring = searchstring.concat(" & ", JSON.stringify(e))
+                    });
+                }
+
+                if (query.cities != undefined) {
                     query.cities.forEach(e => {
-                        citylist.push(e)
+                        searchstring = searchstring.concat(" & ", JSON.stringify(e))
                     });
                 }
 
-                if (query.schools !== undefined) {
+                if (query.schools != undefined) {
                     query.schools.forEach(e => {
-                        schoollist.push(e)
+                        searchstring = searchstring.concat(" & ", JSON.stringify(e))
                     });
                 }
 
-                if (query.types !== undefined) {
+                if (query.types != undefined) {
                     query.types.forEach(e => {
-                        typelist.push(e)
+                        searchstring = searchstring.concat(" & ", JSON.stringify(e))
                     });
                 }
 
-                console.log(query, schoollist, citylist, typelist)
+                const { data, error } = await supabase.rpc('fullsearch', { input: searchstring.substring(3) })
 
-                const { data, error} = await supabase.rpc('fullsearch', { schoolinput: schoollist, cityinput: citylist, typeinput: typelist })
-
-                console.log(error)
+                console.log('querystring - ', searchstring.substring(3))
 
                 if (data !== null) {
                     data.forEach(e => {
@@ -278,7 +281,7 @@ export default function Search(session) {
                     <div className="flex w-full h-10 justify-evenly grow px-3">
 
                         <div className="flex grow">
-                            <CreatableSelect isClearable isMulti styles={colourStyles} placeholder={'Event'} options={eventoptions} onChange={eventchange} />
+                            <Select isClearable isMulti styles={colourStyles} placeholder={'Event'} options={eventoptions} onChange={eventchange} />
                         </div>
 
                         <div className="flex grow">
@@ -290,7 +293,7 @@ export default function Search(session) {
                         </div>
 
                         <div className="flex grow">
-                            <CreatableSelect isClearable isMulti styles={colourStyles} placeholder={'Usertype'} options={usertypeoptions} onChange={usertypechange} />
+                            <Select isClearable isMulti styles={colourStyles} placeholder={'Usertype'} options={usertypeoptions} onChange={usertypechange} />
                         </div>
 
                         <div className="flex bg-activeMenu rounded-xl text-fontSecondary w-10  h-10 mt-1 justify-center hover:cursor-pointer hover:bg-dropShadow" onClick={search}>
