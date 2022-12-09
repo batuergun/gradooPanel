@@ -104,9 +104,9 @@ export default async function webhookReceiver(req, res) {
     }
 
     let schoolclass = ''
-    if (highschool_class.length > 1) {
+    if (highschool_class.length > 0) {
         schoolclass = highschool_class
-    } else if (university_class.length > 1) {
+    } else if (university_class.length > 0) {
         schoolclass = highschool_class
     }
 

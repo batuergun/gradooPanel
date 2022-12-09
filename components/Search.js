@@ -92,16 +92,16 @@ export default function Search(session) {
     ]
 
     const classoptions = [
-        { value: 'Hazırlık (Lise)', label: 'Learn How to Learn' },
+        { value: 'Hazırlık & Lise', label: 'Hazırlık (Lise)' },
         { value: '9', label: '9' },
         { value: '10', label: '10' },
         { value: '11', label: '11' },
         { value: '12', label: '12' },
-        { value: 'Hazırlık (Üniversite)', label: 'Hazırlık (Üniversite)' },
-        { value: '1. sınıf', label: '1. sınıf' },
-        { value: '2. sınıf', label: '2. sınıf' },
-        { value: '3. sınıf', label: '3. sınıf' },
-        { value: '4. sınıf', label: '4. sınıf' },
+        { value: 'Hazırlık & Üniversite', label: 'Hazırlık (Üniversite)' },
+        { value: '1', label: '1. sınıf' },
+        { value: '2', label: '2. sınıf' },
+        { value: '3', label: '3. sınıf' },
+        { value: '4', label: '4. sınıf' },
     ]
 
     // const usertypeoptions = [
@@ -155,6 +155,16 @@ export default function Search(session) {
         });
 
         setQuery(query => ({ ...query, types: usertypes }))
+    }
+
+    const classchange = async (input) => {
+        let classtypes = []
+
+        input.forEach(i => {
+            classtypes.push(i.value)
+        });
+
+        setQuery(query => ({ ...query, class: classtypes }))
     }
 
     function wordSplit(splitinput) {
@@ -223,6 +233,20 @@ export default function Search(session) {
                                 searchstring = searchstring.concat(' | ', JSON.stringify(query.cities[i]))
                             } else {
                                 searchstring = searchstring.concat(JSON.stringify(query.cities[i]))
+                            }
+                        }
+                        searchstring = searchstring.concat(" ) & ")
+                    }
+                }
+
+                if (query.class != undefined) {
+                    if (query.class.length != 0) {
+                        searchstring = searchstring.concat("( ")
+                        for (let i = 0; i < query.class.length; i++) {
+                            if (i > 0 && i < query.class.length + 1) {
+                                searchstring = searchstring.concat(' | ', JSON.stringify(query.class[i]))
+                            } else {
+                                searchstring = searchstring.concat(JSON.stringify(query.class[i]))
                             }
                         }
                         searchstring = searchstring.concat(" ) & ")
@@ -354,6 +378,10 @@ export default function Search(session) {
 
                         <div className="flex grow">
                             <Select isClearable isMulti styles={colourStyles} placeholder={'Usertype'} options={usertypeoptions} onChange={usertypechange} />
+                        </div>
+
+                        <div className="flex grow">
+                            <Select isClearable isMulti styles={colourStyles} placeholder={'Class'} options={classoptions} onChange={classchange} />
                         </div>
 
                         <div className="flex bg-activeMenu rounded-xl text-fontSecondary w-10  h-10 mt-1 justify-center hover:cursor-pointer hover:bg-dropShadow" onClick={search}>
