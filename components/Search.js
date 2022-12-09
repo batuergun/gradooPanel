@@ -195,13 +195,20 @@ export default function Search(session) {
 
                 if (query.events != undefined) {
                     if (query.events.length != 0) {
-                        searchstring = searchstring.concat("( ")
+                        searchstring = searchstring.concat("(")
                         for (let i = 0; i < query.events.length; i++) {
                             if (i > 0 && i < query.events.length + 1) {
-                                searchstring = searchstring.concat(' | ', JSON.stringify(query.events[i]))
+                                let splitted = ''
+                                if (JSON.stringify(query.events[i]).includes(' ')) {
+                                    splitted = JSON.stringify(query.events[i]).replaceAll(' ', ' | ')
+                                    searchstring = searchstring.concat(' | ', splitted)
+                                } else { searchstring = searchstring.concat(JSON.stringify(query.events[i])) }
                             } else {
-                                console.log(splitted)
-                                searchstring = searchstring.concat(JSON.stringify(query.events[i]))
+                                let splitted = ''
+                                if (JSON.stringify(query.events[i]).includes(' ')) {
+                                    splitted = JSON.stringify(query.events[i]).replaceAll(' ', ' | ')
+                                    searchstring = searchstring.concat(splitted)
+                                } else { searchstring = searchstring.concat(JSON.stringify(query.events[i])) }
                             }
                         }
                         searchstring = searchstring.concat(" ) & ")

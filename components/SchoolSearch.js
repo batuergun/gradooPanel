@@ -20,7 +20,6 @@ export default function SchoolSearch(session) {
 
     useEffect(() => {
         getProfile();
-
     }, [session]);
 
     async function getProfile() {
@@ -82,19 +81,11 @@ export default function SchoolSearch(session) {
         return data
     }
 
-    const options = [
-        { value: 'value1', label: 'label1' },
-        { value: 'value2', label: 'label2' },
-    ]
-
-
-
     const handleChange = async (selectedOption) => {
         console.log("handleChange", selectedOption)
 
         async function schoolQuery(input) {
             if (input !== null) {
-                let searchwords = []
                 let selectedlist = []
                 let schoolList = []
 
@@ -105,10 +96,7 @@ export default function SchoolSearch(session) {
                         words.forEach(w => {
                             selectedlist.push(w)
                         });
-                    } else {
-                        selectedlist.push(e.value)
-                    }
-
+                    } else { selectedlist.push(e.value) }
                 });
 
                 const { data } = await supabase.rpc('listsearch', { input: selectedlist })
@@ -117,11 +105,8 @@ export default function SchoolSearch(session) {
                     data.forEach(e => {
                         schoolList.push(e)
                     })
-
                     setSchools(schoolList)
                 }
-
-
             }
         }
         schoolQuery(selectedOption)
