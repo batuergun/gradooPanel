@@ -18,8 +18,8 @@ select count(*) from applications where event=eventname and submitted_at>gte and
 create or replace function renderschoollist(input text) returns table(name text, city text, count bigint) as $$
   select school, city, count from 
   ( select school, city, count(*)
-    from applications 
-    where to_tsvector(unaccent(event) || ' ' || unaccent(city) || ' ' || unaccent(school) || ' ' || unaccent(usertype)) @@ to_tsquery(unaccent(input)) 
+    from ( select distinct email, school, city from applications
+    where to_tsvector(unaccent(event) || ' ' || unaccent(city) || ' ' || unaccent(school) || ' ' || unaccent(usertype)) @@ to_tsquery(unaccent(input)) ) as temp
     group by school, city ) as temp 
     order by count desc
 $$ language sql
