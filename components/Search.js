@@ -82,7 +82,7 @@ export default function Search(session) {
 
     const eventoptions = [
         { value: 'Learn How to Learn', label: 'Learn How to Learn' },
-        { value: 'data test', label: 'data test' },
+        { value: 'Gradoo x Derece Atölyesi', label: 'Gradoo x Derece Atölyesi' },
     ]
 
     const cityoptions = [
