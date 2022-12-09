@@ -22,7 +22,7 @@ export default async function webhookReceiver(req, res) {
         throw new Error("Webhook signature is not valid, someone is faking this!");
     }
 
-    response.sendStatus(200);
+    res.sendStatus(200);
     console.log(data)
 }
 
