@@ -79,21 +79,24 @@ export default async function reload(req, res) {
 
     await request(queryoptions, async (statusCode, result) => {
       let counter = 0
+      let usercache = []
 
-      result.items.forEach(async (user) => {
+      for await (let user of result.items) {
         var event = eventID;
         var firstname = " ";
         var lastname = " ";
         var phone = " ";
         var email = " ";
         var usertype = " ";
-        var school = " ";
         var submitted_at = " ";
         var highschool_city = " ";
         var highschool_class = " ";
         var university_program = " ";
         var university_class = " ";
-        var city = " ";
+
+        let school = []
+        let city = []
+        var highschool_city = []
         var schoolquery = " ";
 
         submitted_at = user.submitted_at;
@@ -143,53 +146,55 @@ export default async function reload(req, res) {
 
         if (school != " ") {
           let splitted = ''
-
           if (JSON.stringify(school).includes(' ')) {
             splitted = JSON.stringify(school).replaceAll(' ', ' & ')
             searchstring = searchstring.concat(splitted)
           } else { searchstring = searchstring.concat(JSON.stringify(school)) }
         }
 
-        if (highschool_city != undefined) {
+        if (highschool_city.length > 1) {
           searchstring = searchstring.concat(' & ', highschool_city)
         }
 
         const { data } = await supabase.rpc('indexschool', { input: searchstring })
 
+        let citystring = ''
         if (data !== null) {
           if (data.length > 0) {
             schoolquery = data[0].name
-            city = data[0].city
+            citystring = citystring.concat(data[0].city)
           } else {
             schoolquery = school
-            city = highschool_city
+            citystring = citystring.concat(highschool_city)
           }
         } else {
           schoolquery = school
-          city = highschool_city
+          citystring = citystring.concat(highschool_city)
         }
 
-        const { error } = await supabase
-          .from('applications')
-          .insert({
-            firstname: firstname,
-            lastname: lastname,
-            phone: phone,
-            email: email,
-            usertype: usertype,
-            school: schoolquery,
-            event: event,
-            submitted_at: submitted_at,
-            city: city
-          })
+        console.log(counter, 'string - ', searchstring, 'data - ', data)
+
+        usercache = [...usercache, {
+          firstname: firstname,
+          lastname: lastname,
+          phone: phone,
+          email: email,
+          usertype: usertype,
+          school: schoolquery,
+          event: event,
+          submitted_at: submitted_at,
+          city: citystring
+        }]
 
         counter += 1
-        console.log(counter)
-        console.log('school', school, 'result - ', schoolquery)
         //console.log(`${firstname}, ${lastname}, ${phone}, ${email}, ${usertype}, ${school}, ${highschool_city}, ${highschool_class}, ${university_program}, ${university_class}, ${eventID}, ${submitted_at}`)
-      });
+      }
 
-      // Callback if there are more than 1000 submissions
+      const { error } = await supabase
+        .from('applications')
+        .insert(usercache)
+
+      //Callback if there are more than 1000 submissions
       if (result.items.length >= 1000) {
         let lastSubmission = result.items[999].token;
         saveQuery(formid, lastSubmission);
