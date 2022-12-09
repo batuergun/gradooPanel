@@ -78,6 +78,7 @@ export default async function reload(req, res) {
     };
 
     await request(queryoptions, async (statusCode, result) => {
+      let counter = 0
 
       result.items.forEach(async (user) => {
         var event = eventID;
@@ -92,6 +93,8 @@ export default async function reload(req, res) {
         var highschool_class = " ";
         var university_program = " ";
         var university_class = " ";
+        var city = " ";
+        var schoolquery = " ";
 
         submitted_at = user.submitted_at;
 
@@ -135,18 +138,54 @@ export default async function reload(req, res) {
           }
         });
 
+
+        let searchstring = ''
+
+        if (school != " ") {
+          let splitted = ''
+
+          if (JSON.stringify(school).includes(' ')) {
+            splitted = JSON.stringify(school).replaceAll(' ', ' & ')
+            searchstring = searchstring.concat(splitted)
+          } else { searchstring = searchstring.concat(JSON.stringify(school)) }
+        }
+
+        if (highschool_city != undefined) {
+          searchstring = searchstring.concat(' & ', highschool_city)
+        }
+
+        const { data } = await supabase.rpc('indexschool', { input: searchstring })
+
+        if (data !== null) {
+          if (data.length > 0) {
+            schoolquery = data[0].name
+            city = data[0].city
+          } else {
+            schoolquery = school
+            city = highschool_city
+          }
+        } else {
+          schoolquery = school
+          city = highschool_city
+        }
+
         const { error } = await supabase
           .from('applications')
           .insert({
-            firstname,
-            lastname,
-            phone,
-            email,
-            usertype,
-            school,
-            event,
-            submitted_at,
+            firstname: firstname,
+            lastname: lastname,
+            phone: phone,
+            email: email,
+            usertype: usertype,
+            school: schoolquery,
+            event: event,
+            submitted_at: submitted_at,
+            city: city
           })
+
+        counter += 1
+        console.log(counter)
+        console.log('school', school, 'result - ', schoolquery)
         //console.log(`${firstname}, ${lastname}, ${phone}, ${email}, ${usertype}, ${school}, ${highschool_city}, ${highschool_class}, ${university_program}, ${university_class}, ${eventID}, ${submitted_at}`)
       });
 
@@ -158,7 +197,7 @@ export default async function reload(req, res) {
     });
   }
 
-  //deleteTable('applications')
+  deleteTable('applications')
   await saveQuery(process.env.TYPEFORM_ID)
 
   res.status(200).json('OK')
