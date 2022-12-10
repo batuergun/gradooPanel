@@ -6,5 +6,24 @@
     "start_url": "/",
     "name": "Gradoo ETT",
     "short_name": "Gradoo",
-    "description": "Gradoo Expansion Tracking Tool"
+    "description": "Gradoo Expansion Tracking Tool",
+    "icons": [
+        {
+          "src": "/favicon.ico",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any maskable"
+        },
+        {
+          "src": "/favicon.ico",
+          "sizes": "384x384",
+          "type": "image/png"
+        },
+        {
+          "src": "/favicon.ico",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ],
 }
+
