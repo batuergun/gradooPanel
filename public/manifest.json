@@ -1,0 +1,10 @@
+{
+    "name": "Gradoo ETT",
+    "short_name": "Gradoo",
+    "description": "Gradoo Expansion Tracking Tool",
+    "start_url": "{{ '/' | relative_url }}",
+    "theme_color": "#f2f7f9",
+    "background_color": "#ffffff",
+    "display": "fullscreen",
+    "display_override": ["window-controls-overlay"]
+} 
