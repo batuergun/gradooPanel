@@ -494,7 +494,7 @@ input[disabled] {
   padding-right: 2vw;
   color: var(--fontPrimary);
   display: flex !important;
-  align-items: center !important; 
+  align-items: center !important;
   justify-content: space-between !important;
 }
 
@@ -538,4 +538,10 @@ input[disabled] {
   margin-left: 0.8vw;
   width: 3vw;
   height: 3vw;
+}
+
+g[class^="exportButtons-upset-"],
+g[class*=" exportButtons-upset-"] {
+  display: none !important;
+  opacity: 0%;
 }

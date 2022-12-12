@@ -28,6 +28,7 @@ ChartJS.register(
 import Sidebar from '../components/Sidebar'
 import TotalApplications from "../components/TotalApplications.js";
 import Timeline from "../components/Timeline";
+import Intersection from "../components/Intersection"
 
 export default function Dashboard(session) {
   const supabase = useSupabaseClient();
@@ -161,7 +162,7 @@ export default function Dashboard(session) {
             <Timeline />
           </div>
           <div className="graph graph3">
-            <canvas id="usertype"></canvas>
+            <Intersection />
           </div>
           <div className="graph graph4">
             <canvas id="highschool_class"></canvas>
