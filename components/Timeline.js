@@ -122,7 +122,6 @@ export default function Timeline() {
           }
           await gettimeline()
         }
-        console.log(eventtimeline)
         eventlist[i].timeline = timelinecache;
         eventtimeline.push(eventlist[i].timeline);
       }
