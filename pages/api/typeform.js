@@ -35,9 +35,8 @@ export default async function webhookReceiver(req, res) {
     var school = " ";
     var submitted_at = " ";
     var highschool_city = " ";
-    var highschool_class = " ";
     var university_program = " ";
-    var university_class = " ";
+    var schoolclass = " ";
 
     var eventID = form_response.definition.title;
     submitted_at = form_response.submitted_at;
@@ -56,7 +55,7 @@ export default async function webhookReceiver(req, res) {
                 highschool_city = answer.choice.label;
                 break;
             case "highschool-class":
-                highschool_class = answer.choice.label;
+                schoolclass = answer.choice.label;
                 break;
             case "university-name":
                 school = answer.choice.label;
@@ -65,7 +64,7 @@ export default async function webhookReceiver(req, res) {
                 university_program = answer.text;
                 break;
             case "university-class":
-                university_class = answer.choice.label;
+                schoolclass = answer.choice.label;
                 break;
         }
         if (answer.field.type === "phone_number") phone = answer.phone_number;
@@ -101,13 +100,6 @@ export default async function webhookReceiver(req, res) {
     } else {
         schoolquery = school
         citystring = citystring.concat(highschool_city)
-    }
-
-    let schoolclass = ''
-    if (highschool_class.length > 0) {
-        schoolclass = highschool_class
-    } else if (university_class.length > 0) {
-        schoolclass = highschool_class
     }
 
     console.log('string - ', searchstring, 'data - ', data)

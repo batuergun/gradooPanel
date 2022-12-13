@@ -24,7 +24,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY={Supabase-Anon-Key}
 ```
 
 ### **To-do**
-- [ ] Venn diagram intersection
+- [x] Venn diagram intersection
 - [ ] Event table & event sync
 - [ ] Campaign Pages
 - [ ] School detail page

@@ -90,12 +90,10 @@ export default async function reload(req, res) {
         var usertype = " ";
         var submitted_at = " ";
         var highschool_city = " ";
-        var highschool_class = " ";
         var university_program = " ";
-        var university_class = " ";
+        var schoolclass = " ";
 
         let school = []
-        let city = []
         var highschool_city = []
         var schoolquery = " ";
 
@@ -113,7 +111,7 @@ export default async function reload(req, res) {
               highschool_city = answer.text;
               break;
             case "highschool-class":
-              highschool_class = answer.text;
+              schoolclass = answer.text;
               break;
             case "university-name":
               school = answer.text;
@@ -122,7 +120,7 @@ export default async function reload(req, res) {
               university_program = answer.text;
               break;
             case "university-class":
-              university_class = answer.text;
+              schoolclass = answer.text;
               break;
           }
           switch (answer.field.id) {
@@ -141,9 +139,7 @@ export default async function reload(req, res) {
           }
         });
 
-
         let searchstring = ''
-
         if (school != " ") {
           let splitted = ''
           if (JSON.stringify(school).includes(' ')) {
@@ -170,13 +166,6 @@ export default async function reload(req, res) {
         } else {
           schoolquery = school
           citystring = citystring.concat(highschool_city)
-        }
-
-        let schoolclass = ''
-        if (highschool_class.length > 0) {
-          schoolclass = highschool_class
-        } else if (university_class.length > 0) {
-          schoolclass = highschool_class
         }
 
         console.log(counter, 'string - ', searchstring, 'data - ', data)
