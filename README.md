@@ -22,3 +22,11 @@ yarn dev
 NEXT_PUBLIC_SUPABASE_URL={Supabase-URL}
 NEXT_PUBLIC_SUPABASE_ANON_KEY={Supabase-Anon-Key}
 ```
+
+### **To-do**
+- [ ] Venn diagram intersection
+- [ ] Event table & event sync
+- [ ] Campaign Pages
+- [ ] School detail page
+
+- [ ] RPC - dynamic intersection data
