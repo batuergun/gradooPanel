@@ -24,3 +24,18 @@ create or replace function renderschoollist(input text) returns table(name text,
     order by count desc
 $$ language sql
 ```
+
+## Venn diagram Intersection
+
+```sql
+create or replace function eventinfo() returns table(name text, count bigint) as $$
+  select distinct event, count(*) from ( select distinct email, event from applications ) as temp group by event
+$$ language sql;
+
+create or replace function intersection(input text, input2 text) returns bigint as $$
+  select count(*) from (
+    select distinct email from applications where to_tsvector(unaccent(event)) @@ to_tsquery(unaccent('Learn & How & to & Learn'))
+    intersect
+    select distinct email from applications where to_tsvector(unaccent(event)) @@ to_tsquery(unaccent('Gradoo & Derece & Atolyesi')) ) as temp
+$$ language sql;
+```
