@@ -119,7 +119,7 @@ export default async function webhookReceiver(req, res) {
             class: schoolclass
         })
 
-    res.status(200)
+    res.status(200).json({ message: "OK" })
 }
 
 export const config = {
