@@ -77,6 +77,11 @@ export default function Search(session) {
             ...base,
             flex: 1,
             padding: '.5rem',
+        }),
+        menuList: (provided, state) => ({
+            ...provided,
+            paddingTop: 0,
+            paddingBottom: 0
         })
     };
 
@@ -362,43 +367,43 @@ export default function Search(session) {
                 </div>
 
                 <div className="flex-col">
-                    <div className="flex w-full h-10 justify-evenly grow px-3">
+                    <div className="flex w-full h-8 justify-evenly px-2 text-sm">
 
-                        <div className="flex grow">
+                        <div className="flex grow basis-14">
                             <Select isClearable isMulti styles={colourStyles} placeholder={'Event'} options={eventoptions} onChange={eventchange} />
                         </div>
 
-                        <div className="flex grow">
+                        <div className="flex grow basis-10">
                             <CreatableSelect isClearable isMulti styles={colourStyles} placeholder={'City'} options={cityoptions} onChange={citychange} />
                         </div>
 
-                        <div className="flex grow">
+                        <div className="flex grow basis-10">
                             <CreatableSelect isClearable isMulti styles={colourStyles} placeholder={'School'} onChange={schoolchange} />
                         </div>
 
-                        <div className="flex grow">
+                        <div className="flex grow basis-10">
                             <Select isClearable isMulti styles={colourStyles} placeholder={'Usertype'} options={usertypeoptions} onChange={usertypechange} />
                         </div>
 
-                        <div className="flex grow">
+                        <div className="flex grow basis-10">
                             <Select isClearable isMulti styles={colourStyles} placeholder={'Class'} options={classoptions} onChange={classchange} />
                         </div>
 
-                        <div className="flex bg-activeMenu rounded-xl text-fontSecondary w-10  h-10 mt-1 justify-center hover:cursor-pointer hover:bg-dropShadow" onClick={search}>
+                        <div className="flex bg-activeMenu rounded-xl text-fontSecondary w-8  h-8 mt-1 justify-center hover:cursor-pointer hover:bg-dropShadow" onClick={search}>
                             <img src="/img/query.svg" className="w-4" />
                         </div>
 
                     </div>
 
-                    <div className="flex mt-2 p-4">
+                    <div className="flex mt-14 p-4">
                         <div className="flex bg-cardBackground p-4 text-fontPrimary rounded-xl">
                             <p className="text-current font-semibold">{schools.length}</p>
                             <p className="text-current ml-1"> result(s) found.</p>
                         </div>
                     </div>
 
-                    <div className="flex p-4">
-                        <div className="p-3 bg-cardBackground w-full h-[55vh] rounded-2xl overflow-auto">
+                    <div className="flex px-4">
+                        <div className="p-2 bg-cardBackground w-full h-[50vh] rounded-2xl overflow-auto">
                             <div className="table w-full">
 
                                 <div className="table-header-group">
