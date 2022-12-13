@@ -37,3 +37,4 @@ next-env.d.ts
 
 .vscode
 package-lock.json
+public/sw.js.map
