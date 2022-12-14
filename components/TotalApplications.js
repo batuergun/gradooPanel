@@ -42,6 +42,8 @@ export default function TotalApplications() {
     async function geteventlist() {
       var timeline = []
       var graphtimeline = []
+      let eventuniquetotal = []
+      let distinctusercount = 0
 
       var d = new Date();
       for (var i = -1; i < 14; i++) {
@@ -81,10 +83,7 @@ export default function TotalApplications() {
       //
       const getdistinctuser = async () => {
         const { data } = await supabase.rpc('distinctuser')
-        eventlist.push({
-          eventid: "Total Unique Applicants",
-          distinct: data,
-        });
+        distinctusercount = data
       }
       await getdistinctuser()
 
@@ -92,13 +91,16 @@ export default function TotalApplications() {
       let eventlabels = []
       let eventtotal = []
       let eventdistinct = []
-      let eventtimeline = []
 
       for (let i = 0; i < eventlist.length; i++) {
         eventlabels.push(eventlist[i].eventid);
         eventtotal.push(eventlist[i].total - eventlist[i].distinct);
         eventdistinct.push(eventlist[i].distinct);
       }
+
+      eventlabels.push('Total Unique Applications')
+      for (let i = 0; i < eventtotal.length; i++) { eventuniquetotal.push(i) }
+      eventuniquetotal.push(distinctusercount)
 
       setgraphdata({
         labels: eventlabels,
@@ -108,9 +110,11 @@ export default function TotalApplications() {
             data: eventdistinct,
             backgroundColor: [
               "rgba(54, 162, 235, 0.2)",
+
             ],
             borderColor: [
               "rgba(54, 162, 235, 1)",
+
             ],
             borderWidth: 1,
           },
@@ -124,6 +128,17 @@ export default function TotalApplications() {
               "rgba(255, 206, 86, 1)",
             ],
             borderWidth: 1,
+          },
+          {
+            label: 'Total Unique',
+            data: eventuniquetotal,
+            backgroundColor: [
+              "rgba(255, 100, 30, 0.2)",
+            ],
+            borderColor: [
+              "rgba(255, 100, 30, 1)",
+            ],
+            borderWidth: 1,
           }
         ],
       })
@@ -135,7 +150,7 @@ export default function TotalApplications() {
 
   }, []);
 
-  
+
   return (
     <>
       <Bar options={graphoptions} data={graphdata} />
