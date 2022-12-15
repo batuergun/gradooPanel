@@ -8,7 +8,7 @@ export default function Intersection() {
     const [dataset, defineDataset] = useState([])
 
     useEffect(() => {
-        let colorPalette = ['#73bbeb', '#ffc680']
+        let colorPalette = ['#f09564', '#4bc0c0']
 
         async function getEventData() {
             let events = []
