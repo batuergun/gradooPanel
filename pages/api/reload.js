@@ -143,9 +143,9 @@ export default async function reload(req, res) {
         if (school != " ") {
           let splitted = ''
           if (JSON.stringify(school).includes(' ')) {
-            splitted = JSON.stringify(school).replaceAll(' ', ' & ')
-            searchstring = searchstring.concat(splitted)
-          } else { searchstring = searchstring.concat(JSON.stringify(school)) }
+            splitted = JSON.stringify(school).replaceAll(' ', '& ')
+            searchstring = '( ' + searchstring.concat(splitted.replaceAll('"', '').replaceAll('-', ' ') + ' ) ')
+          } else { searchstring = '( ' + searchstring.concat(school) + ' ) ' }
         }
 
         if (highschool_city.length > 1) {
@@ -176,6 +176,7 @@ export default async function reload(req, res) {
           phone: phone,
           email: email,
           usertype: usertype,
+          raw_school_input: school,
           school: schoolquery,
           event: event,
           submitted_at: submitted_at,
@@ -199,8 +200,17 @@ export default async function reload(req, res) {
     });
   }
 
-  //deleteTable('applications')
-  await saveQuery(process.env.TYPEFORM_ID)
+  //
+  const { data } = await supabase
+    .from('campaigns')
+    .select('*')
+
+  deleteTable('applications')
+  for await (let campaign of data) {
+    await saveQuery(campaign.typeformID)
+  }
+
+
 
   res.status(200).json('OK')
 }
