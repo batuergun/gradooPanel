@@ -162,11 +162,9 @@ export default async function reload(req, res) {
             schoolquery = resultdata[0].name
             citystring = citystring.concat(resultdata[0].city)
           } else {
-            schoolquery = school
             citystring = citystring.concat(highschool_city)
           }
         } else {
-          schoolquery = school
           citystring = citystring.concat(highschool_city)
         }
 
