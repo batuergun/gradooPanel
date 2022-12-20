@@ -50,4 +50,19 @@ create or replace function indexschool(input text, city_input text) returns tabl
   order by score desc
   limit 1
 $$ language sql
+
+create or replace function indexuniversity(input text) returns table(name text, city text) as $$
+  select name, city from schools
+  where to_tsvector(unaccent(name) || ' ' || unaccent(city) || ' ' || unaccent(type)) @@ to_tsquery(unaccent(input))
+  order by ts_rank(to_tsvector(unaccent(name) || ' ' || unaccent(city) || ' ' || unaccent(type)), plainto_tsquery(unaccent(input))) desc
+  limit 1
+$$ language sql
+```
+
+## FTS - old
+```sql
+  select name, city from schools
+  where to_tsvector(unaccent(name) || ' ' || unaccent(city) || ' ' || unaccent(type)) @@ to_tsquery(unaccent(input))
+  order by ts_rank(to_tsvector(unaccent(name) || ' ' || unaccent(city) || ' ' || unaccent(type)), plainto_tsquery(unaccent(input))) desc
+  limit 1
 ```

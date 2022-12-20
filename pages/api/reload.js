@@ -139,26 +139,28 @@ export default async function reload(req, res) {
           }
         });
 
-        // let searchstring = ''
-        // if (school != " ") {
-        //   let splitted = ''
-        //   if (JSON.stringify(school).includes(' ')) {
-        //     splitted = JSON.stringify(school).replaceAll(' ', '& ')
-        //     searchstring = '( ' + searchstring.concat(splitted.replaceAll('"', '').replaceAll('-', ' ') + ' ) ')
-        //   } else { searchstring = '( ' + searchstring.concat(school) + ' ) ' }
-        // }
-
-        // if (highschool_city.length > 1) {
-        //   searchstring = searchstring.concat(' & ', highschool_city)
-        // }
-
-        const { data } = await supabase.rpc('indexschool', { input: school, city_input: highschool_city })
+        let resultdata = []
+        if (usertype == 'Üniversite') {
+          let searchstring = ''
+          if (school != " ") {
+            let splitted = ''
+            if (JSON.stringify(school).includes(' ')) {
+              splitted = JSON.stringify(school).replaceAll(' ', '& ')
+              searchstring = '( ' + searchstring.concat(splitted.replaceAll('"', '').replaceAll('-', ' ') + ' ) ')
+            } else { searchstring = '( ' + searchstring.concat(school) + ' ) ' }
+          }
+          const { data } = await supabase.rpc('indexuniversity', { input: searchstring })
+          resultdata = data
+        } else {
+          const { data } = await supabase.rpc('indexschool', { 'input': school, 'city_input': highschool_city })
+          resultdata = data
+        }
 
         let citystring = ''
-        if (data !== null) {
-          if (data.length > 0) {
-            schoolquery = data[0].name
-            citystring = citystring.concat(data[0].city)
+        if (resultdata !== null) {
+          if (resultdata.length > 0) {
+            schoolquery = resultdata[0].name
+            citystring = citystring.concat(resultdata[0].city)
           } else {
             schoolquery = school
             citystring = citystring.concat(highschool_city)
@@ -168,7 +170,7 @@ export default async function reload(req, res) {
           citystring = citystring.concat(highschool_city)
         }
 
-        console.log(counter, 'string - ', school, highschool_city, 'data - ', data.name, data.city)
+        console.log(counter, 'string - ', school, highschool_city, 'data - ', resultdata)
 
         usercache = [...usercache, {
           firstname: firstname,
