@@ -172,19 +172,21 @@ export default async function reload(req, res) {
 
         console.log(counter, 'string - ', school, highschool_city, 'data - ', resultdata)
 
-        usercache = [...usercache, {
-          firstname: firstname,
-          lastname: lastname,
-          phone: phone,
-          email: email,
-          usertype: usertype,
-          raw_school_input: school,
-          school: schoolquery,
-          event: event,
-          submitted_at: submitted_at,
-          city: citystring,
-          class: schoolclass
-        }]
+        if (schoolquery.length > 0) {
+          usercache = [...usercache, {
+            firstname: firstname,
+            lastname: lastname,
+            phone: phone,
+            email: email,
+            usertype: usertype,
+            raw_school_input: school,
+            school: schoolquery,
+            event: event,
+            submitted_at: submitted_at,
+            city: citystring,
+            class: schoolclass
+          }]
+        }
 
         counter += 1
         //console.log(`${firstname}, ${lastname}, ${phone}, ${email}, ${usertype}, ${school}, ${highschool_city}, ${highschool_class}, ${university_program}, ${university_class}, ${eventID}, ${submitted_at}`)
