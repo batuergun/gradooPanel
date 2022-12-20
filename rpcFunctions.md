@@ -39,3 +39,15 @@ create or replace function intersection(input text, input2 text) returns bigint 
     select distinct email from applications where to_tsvector(unaccent(event)) @@ to_tsquery(unaccent('Gradoo & Derece & Atolyesi')) ) as temp
 $$ language sql;
 ```
+
+## FTS - new
+```sql
+create index if not exists search_index on schools using gin (name gin_trgm_ops)
+
+create or replace function indexschool(input text, city_input text) returns table(name text, city text, score bigint) as $$
+  select name, city, (similarity(unaccent(input), unaccent(name)) + similarity(unaccent(city_input), unaccent(city))) as score from schools p
+  where unaccent(name) % unaccent(input) and unaccent(city) % unaccent(city_input)
+  order by score desc
+  limit 1
+$$ language sql
+```

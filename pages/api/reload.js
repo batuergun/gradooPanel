@@ -139,20 +139,20 @@ export default async function reload(req, res) {
           }
         });
 
-        let searchstring = ''
-        if (school != " ") {
-          let splitted = ''
-          if (JSON.stringify(school).includes(' ')) {
-            splitted = JSON.stringify(school).replaceAll(' ', '& ')
-            searchstring = '( ' + searchstring.concat(splitted.replaceAll('"', '').replaceAll('-', ' ') + ' ) ')
-          } else { searchstring = '( ' + searchstring.concat(school) + ' ) ' }
-        }
+        // let searchstring = ''
+        // if (school != " ") {
+        //   let splitted = ''
+        //   if (JSON.stringify(school).includes(' ')) {
+        //     splitted = JSON.stringify(school).replaceAll(' ', '& ')
+        //     searchstring = '( ' + searchstring.concat(splitted.replaceAll('"', '').replaceAll('-', ' ') + ' ) ')
+        //   } else { searchstring = '( ' + searchstring.concat(school) + ' ) ' }
+        // }
 
-        if (highschool_city.length > 1) {
-          searchstring = searchstring.concat(' & ', highschool_city)
-        }
+        // if (highschool_city.length > 1) {
+        //   searchstring = searchstring.concat(' & ', highschool_city)
+        // }
 
-        const { data } = await supabase.rpc('indexschool', { input: searchstring })
+        const { data } = await supabase.rpc('indexschool', { input: school, city_input: highschool_city })
 
         let citystring = ''
         if (data !== null) {
@@ -168,7 +168,7 @@ export default async function reload(req, res) {
           citystring = citystring.concat(highschool_city)
         }
 
-        console.log(counter, 'string - ', searchstring, 'data - ', data)
+        console.log(counter, 'string - ', school, highschool_city, 'data - ', data.name, data.city)
 
         usercache = [...usercache, {
           firstname: firstname,
