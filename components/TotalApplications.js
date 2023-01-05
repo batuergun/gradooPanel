@@ -20,7 +20,7 @@ let graphoptions = {
   },
 }
 
-export default function TotalApplications() {
+export default function TotalApplications(dateValue) {
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
   const [graphdata, setgraphdata] = useState({
@@ -38,7 +38,6 @@ export default function TotalApplications() {
   });
 
   useEffect(() => {
-
     async function geteventlist() {
       var timeline = []
       var graphtimeline = []
@@ -70,20 +69,20 @@ export default function TotalApplications() {
 
       //
       for (var i = 0; i < eventlist.length; i++) {
-        const { data, error } = await supabase.rpc('eventcount', { eventname: eventlist[i].eventid })
-        eventlist[i].total = data;
+        const { data, error } = await supabase.rpc('eventcount_by_time', { eventname: eventlist[i].eventid, from_input: dateValue.startDate, until_input: dateValue.endDate })
+        eventlist[i].total = data[0].count;
       }
 
       //
       for (var i = 0; i < eventlist.length; i++) {
-        const { data, error } = await supabase.rpc('eventdistinctcount', { eventname: eventlist[i].eventid })
-        eventlist[i].distinct = data;
+        const { data, error } = await supabase.rpc('eventdistinctcount_by_time', { eventname: eventlist[i].eventid, from_input: dateValue.startDate, until_input: dateValue.endDate })
+        eventlist[i].distinct = data[0].count;
       }
 
       //
       const getdistinctuser = async () => {
-        const { data } = await supabase.rpc('distinctuser')
-        distinctusercount = data
+        const { data } = await supabase.rpc('distinctuser_by_time', { from_input: dateValue.startDate, until_input: dateValue.endDate })
+        distinctusercount = data[0].count
       }
       await getdistinctuser()
 
@@ -99,7 +98,7 @@ export default function TotalApplications() {
       }
 
       eventlabels.push('Total Unique Applications')
-      for (let i = 0; i < eventtotal.length; i++) { eventuniquetotal.push(i) }
+      for (let i = 0; i < eventtotal.length; i++) { eventuniquetotal.push(0) }
       eventuniquetotal.push(distinctusercount)
 
       setgraphdata({
@@ -148,7 +147,7 @@ export default function TotalApplications() {
     //gettotalapp(timeline)
     geteventlist()
 
-  }, []);
+  }, [dateValue]);
 
 
   return (

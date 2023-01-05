@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import Datepicker from "react-tailwindcss-datepicker";
 
 import {
@@ -31,6 +31,7 @@ import TotalApplications from "../components/TotalApplications.js";
 import Timeline from "../components/Timeline";
 import Intersection from "../components/Intersection"
 import ClassChart from "../components/ClassChart"
+import Temp from "../components/Temp"
 
 export default function Dashboard(session) {
   const supabase = useSupabaseClient();
@@ -42,22 +43,22 @@ export default function Dashboard(session) {
   const [username, setUsername] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState(null);
 
-  const [events, setEvents] = useState(null);
-
-  const [value, setValue] = useState({
-    startDate: new Date(),
-    endDate: new Date().setMonth(11)
+  const [dateValue, setDateValue] = useState({
+    startDate: new Date(new Date().setDate(new Date().getDate() - 14)).toISOString().split('T')[0],
+    endDate: new Date().toISOString().split('T')[0]
   });
 
-  const handleValueChange = (newValue) => {
-    console.log("newValue:", newValue);
-    setValue(newValue);
+  const handleValueChange = (dateValue) => {
+    setDateValue({
+      startDate: dateValue.startDate,
+      endDate: dateValue.endDate
+    })
   }
 
   useEffect(() => {
     getProfile();
     setLoading(false)
-  }, [session]);
+  }, [session, dateValue]);
 
   async function getProfile() {
     try {
@@ -167,19 +168,18 @@ export default function Dashboard(session) {
         </div>
 
         <div className="px-6 text-[.5rem]">
-          <Datepicker value={value} onChange={handleValueChange} showShortcuts={true} showFooter={true} inputClassName="rounded-xl text-[.5rem]"/>
-
+          <Datepicker value={dateValue} onChange={handleValueChange} showShortcuts={true} showFooter={true} inputClassName="rounded-xl text-[.5rem]" />
         </div>
 
         <div className="viewport">
           <div className="graph graph1">
-            <TotalApplications />
+            <TotalApplications startDate={dateValue.startDate} endDate={dateValue.endDate} />
           </div>
           <div className="graph graph2">
-            <Timeline />
+            <Timeline startDate={''} endDate={''} />
           </div>
           <div className="graph graph3">
-            <Intersection />
+            <Temp startDate={dateValue.startDate} endDate={dateValue.endDate} />
           </div>
           <div className="graph graph4">
             <ClassChart type={'highschool'} />
