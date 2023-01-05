@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
+import Datepicker from "react-tailwindcss-datepicker";
 
 import {
   Chart as ChartJS,
@@ -42,6 +43,16 @@ export default function Dashboard(session) {
   const [avatarUrl, setAvatarUrl] = useState(null);
 
   const [events, setEvents] = useState(null);
+
+  const [value, setValue] = useState({
+    startDate: new Date(),
+    endDate: new Date().setMonth(11)
+  });
+
+  const handleValueChange = (newValue) => {
+    console.log("newValue:", newValue);
+    setValue(newValue);
+  }
 
   useEffect(() => {
     getProfile();
@@ -153,6 +164,11 @@ export default function Dashboard(session) {
               <div className="avatar no-image" />
             )}
           </div>
+        </div>
+
+        <div className="px-6 text-[.5rem]">
+          <Datepicker value={value} onChange={handleValueChange} showShortcuts={true} showFooter={true} inputClassName="rounded-xl text-[.5rem]"/>
+
         </div>
 
         <div className="viewport">

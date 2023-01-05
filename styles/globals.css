@@ -23,7 +23,6 @@ body {
 }
 
 * {
-  color: var(--custom-color);
   font-family: var(--custom-font-family);
   box-sizing: border-box;
 
@@ -39,6 +38,14 @@ body {
 
 }
 
+h1 {
+  color: var(--custom-color);
+}
+
+h2 {
+  color: var(--custom-color);
+}
+
 html,
 body,
 #__next {
@@ -48,13 +55,14 @@ body,
   background-color: var(--backgroundPrimary);
 
   font-family: "Inter";
-  font-size: 1.5vw;
+  font-size: 1.2rem;
 
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+/* 
 button,
 .button {
   color: var(--custom-color);
@@ -76,6 +84,7 @@ button.primary,
   background-color: var(--custom-color-brand);
   border: 1px solid var(--custom-color-brand);
 }
+*/
 
 /* Widgets */
 
@@ -169,6 +178,7 @@ label {
   text-transform: uppercase;
 }
 
+/* 
 input {
   width: 100%;
   border-radius: 5px;
@@ -182,6 +192,8 @@ input {
 input[disabled] {
   color: var(--custom-color-secondary);
 }
+
+*/
 
 /* Utils */
 
