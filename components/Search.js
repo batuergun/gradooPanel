@@ -4,8 +4,8 @@ import { useRouter } from "next/router";
 
 import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
-
 import Sidebar from '../components/Sidebar'
+import Datepicker from "react-tailwindcss-datepicker";
 
 export default function Search(session) {
     const supabase = useSupabaseClient();
@@ -19,6 +19,18 @@ export default function Search(session) {
 
     const [query, setQuery] = useState({ events: [], cities: [], schools: [], types: [] })
     const [schools, setSchools] = useState([])
+
+    const [dateValue, setDateValue] = useState({
+        startDate: new Date(new Date().setDate(new Date().getDate() - 14)).toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0]
+    });
+
+    const handleValueChange = (dateValue) => {
+        setDateValue({
+            startDate: dateValue.startDate,
+            endDate: dateValue.endDate
+        })
+    }
 
     useEffect(() => {
         getProfile();
@@ -297,14 +309,14 @@ export default function Search(session) {
                 }
 
 
-                const { data, error } = await supabase.rpc('renderschoollist', { input: searchstring.substring(0, searchstring.length - 3) })
-                console.log(error)
+                const { data, error } = await supabase.rpc('renderschoollist_by_time', { input: searchstring.substring(0, searchstring.length - 3), from_input: dateValue.startDate, until_input: dateValue.endDate })
+                console.log(data)
 
                 console.log('querystring - ', searchstring.substring(0, searchstring.length - 3))
 
                 if (data !== null) {
                     data.forEach(e => {
-                        if (e.name !== ' ') {
+                        if (e.school !== ' ') {
                             resultList.push(e)
                         }
                     })
@@ -318,7 +330,7 @@ export default function Search(session) {
 
     return (
         <>
-            <Sidebar activeMenu={'Search'}/>
+            <Sidebar activeMenu={'Search'} />
 
             <div className="container">
                 <div className="header">
@@ -343,8 +355,12 @@ export default function Search(session) {
                     </div>
                 </div>
 
+                <div className="px-8 text-[.5rem]">
+                    <Datepicker value={dateValue} onChange={handleValueChange} showShortcuts={true} showFooter={true} inputClassName="rounded-xl text-[.5rem]" />
+                </div>
+
                 <div className="flex-col">
-                    <div className="flex w-full h-8 justify-evenly px-2 text-sm">
+                    <div className="flex w-full h-8 justify-evenly px-8 mt-1 text-sm">
 
                         <div className="flex grow basis-14">
                             <Select isClearable isMulti styles={colourStyles} placeholder={'Event'} options={eventoptions} onChange={eventchange} />
@@ -372,14 +388,14 @@ export default function Search(session) {
 
                     </div>
 
-                    <div className="flex mt-14 p-4">
+                    <div className="flex mt-10 p-8">
                         <div className="flex bg-cardBackground p-4 text-fontPrimary rounded-xl">
                             <p className="text-current font-semibold">{schools.length}</p>
                             <p className="text-current ml-1"> result(s) found.</p>
                         </div>
                     </div>
 
-                    <div className="flex px-4">
+                    <div className="flex px-8">
                         <div className="p-2 bg-cardBackground w-full h-[50vh] rounded-2xl overflow-auto">
                             <div className="table w-full">
 
@@ -396,7 +412,7 @@ export default function Search(session) {
                                     {schools.map(school => (
                                         <>
                                             <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
-                                                <div className="table-cell text-current text-sm">{school.name}</div>
+                                                <div className="table-cell text-current text-sm">{school.school}</div>
                                                 <div className="table-cell text-current text-sm text-center">{school.count}</div>
                                                 <div className="table-cell text-current text-sm text-center">{school.city}</div>
                                             </div>
