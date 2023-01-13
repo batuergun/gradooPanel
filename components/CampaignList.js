@@ -15,6 +15,8 @@ export default function CampaignList(session) {
     const [avatar_url, setAvatarUrl] = useState(null);
 
     const [campaignList, setCampaignList] = useState([]);
+    const [listRender, setListRender] = useState(true)
+    const [selectedCampaign, setSelectedCampaign] = useState({})
 
     useEffect(() => {
         getProfile();
@@ -74,13 +76,25 @@ export default function CampaignList(session) {
         setCampaignList(data)
     }
 
+    const setCampaign = props => {
+        console.log(props)
+        setListRender(false)
+        setSelectedCampaign(props)
+    }
+
     function renderCampaignList() {
         return <>
             {campaignList.map((campaign) => (
-                <div className="rounded-2xl bg-cardBackground p-5 m-4 hover:brightness-75 cursor-pointer">
+                <div className="rounded-2xl bg-cardBackground p-5 m-4 hover:brightness-75 cursor-pointer" onClick={() => { setCampaign(campaign) }}>
                     {campaign.title}
                 </div>
             ))}
+        </>
+    }
+
+    function campaignPage() {
+        return <>
+            {selectedCampaign.title}
         </>
     }
 
@@ -99,7 +113,8 @@ export default function CampaignList(session) {
                 </div>
             </div>
 
-            {renderCampaignList()}
+            {listRender ? <>{renderCampaignList()}</> : <>{campaignPage()}</>}
+
 
         </div>
     </>
