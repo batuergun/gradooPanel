@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
 
+import Sidebar from '../components/Sidebar'
+
 export default function Search(session) {
     const supabase = useSupabaseClient();
     const user = useUser();
@@ -316,48 +318,7 @@ export default function Search(session) {
 
     return (
         <>
-            <div className="sidebar">
-                <h1>Gradoo Panel</h1>
-                <img src="/img/divider.svg" className="divider" />
-
-                <div className="section summary" onClick={() => router.push({ pathname: "/" })} >
-                    <img src="/img/summary.svg" className="icon" />
-                    <h2>Summary</h2>
-                </div>
-
-                <div className="section query bg-active-menu" onClick={() => router.push({ pathname: "/search" })} >
-                    <img src="/img/query.svg" className="icon" />
-                    <h2>Search</h2>
-                </div>
-
-                <div className="section campaigns" campaign-button>
-                    <img src="/img/summary.svg" className="icon" />
-                    <h2>Campaigns</h2>
-                </div>
-
-                <div className="campaignlist visible" campaign-list>
-                    <div
-                        className="campaignelement"
-                        onClick={() => router.push({ pathname: "/project/1" })}
-                    >
-                        Gradoo x Derece Atölyesi
-                    </div>
-                    <div
-                        className="campaignelement"
-                        onClick={() => router.push({ pathname: "/project/2" })}
-                    >
-                        Learn How to Learn: English
-                    </div>
-                </div>
-
-                <div
-                    className="section settings"
-                    onClick={() => supabase.auth.signOut()}
-                >
-                    <img src="/img/db.svg" className="icon" />
-                    <h2>Log Out</h2>
-                </div>
-            </div>
+            <Sidebar activeMenu={'Search'}/>
 
             <div className="container">
                 <div className="header">
