@@ -29,6 +29,7 @@ ChartJS.register(
 import Sidebar from '../components/Sidebar'
 import TotalApplications from "../components/TotalApplications.js";
 import Timeline from "../components/Timeline";
+import TimelineV2 from "../components/TimelineV2";
 import Intersection from "../components/Intersection"
 import ClassChart from "../components/ClassChart"
 import Temp from "../components/Temp"
@@ -132,16 +133,16 @@ export default function Dashboard(session) {
         <div className="h-[80vh] p-8 grid grid-cols-6 grid-rows-2 content-around gap-4">
 
           <div className="rounded-3xl bg-cardBackground shadow-xl p-4 flex items-center justify-center col-start-1 col-span-6 row-start-1">
-            <Timeline startDate={''} endDate={''} />
+            <TimelineV2 startDate={dateValue.startDate} endDate={dateValue.endDate} />
           </div>
           <div className="rounded-3xl bg-cardBackground shadow-xl p-4 flex items-center justify-center col-start-1 col-span-2 row-start-2">
             <TotalApplications startDate={dateValue.startDate} endDate={dateValue.endDate} />
           </div>
           <div className="rounded-3xl bg-cardBackground shadow-xl p-4 flex items-center justify-center col-start-3 col-span-2 row-start-2">
-            <ClassChart type={'highschool'} />
+            <ClassChart type={'highschool'} startDate={dateValue.startDate} endDate={dateValue.endDate} />
           </div>
           <div className="rounded-3xl bg-cardBackground shadow-xl p-4 flex items-center justify-center col-start-5 col-span-2 row-start-2">
-            <ClassChart type={'university'} />
+            <ClassChart type={'university'} startDate={dateValue.startDate} endDate={dateValue.endDate} />
           </div>
 
 

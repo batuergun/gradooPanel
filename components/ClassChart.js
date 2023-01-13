@@ -49,7 +49,7 @@ export default function ClassChart(options) {
 
     useEffect(() => {
         async function getClassData() {
-            const { data } = await supabase.rpc('classinfo')
+            const { data } = await supabase.rpc('classinfo_by_time', {from_input: options.startDate, until_input: options.endDate})
 
             let highschoollist = { 9: 0, 10: 0, 11: 0, 12: 0, 'mezun': 0, 'hazirlik': 0 }
             let universitylist = { 1: 0, 2: 0, 3: 0, 4: 0, 'hazirlik': 0 }
@@ -76,7 +76,6 @@ export default function ClassChart(options) {
                     }
                 }
             });
-            console.log(data)
 
             hs_setgraphdata({
                 labels: ['9', '10', '11', '12', 'Mezun', 'Hazirlik'],
@@ -121,7 +120,7 @@ export default function ClassChart(options) {
             })
         }
         getClassData()
-    }, [])
+    }, [options])
 
     if (options.type === 'university') {
         return (

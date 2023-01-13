@@ -12,7 +12,7 @@ export default async function reload(req, res) {
   // const { data, error } = await supabase.rpc('distinctuser')
   // console.log(data)
 
-  const { data, error } = await supabase.rpc('eventdistinctcount_by_time', { eventname: 'Gradoo x Derece Atölyesi', from_input: '2022-12-1', until_input: '2022-12-31'})
+  const { data, error } = await supabase.rpc('timeline_query', { eventname: 'Gradoo x Derece Atölyesi', from_input: '2022-12-1', until_input: '2022-12-5'})
   console.log(data[0].count)
 
   // const { data, error } = await supabase.rpc('eventcount', { eventname: 'Gradoo x Derece Atölyesi' })
