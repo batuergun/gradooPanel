@@ -301,7 +301,9 @@ export default function Search(session) {
 
                 if (data !== null) {
                     data.forEach(e => {
-                        resultList.push(e)
+                        if (e.name !== ' ') {
+                            resultList.push(e)
+                        }
                     })
                     setSchools(resultList)
                 }
