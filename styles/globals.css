@@ -24,7 +24,6 @@ body {
 
 * {
   font-family: var(--custom-font-family);
-  box-sizing: border-box;
 
   --backgroundPrimary: #e1e9ef;
   --backgroundSecondary: #1b2328;
@@ -50,7 +49,6 @@ html,
 body,
 #__next {
   width: 100vw;
-  height: 100vh;
 
   background-color: var(--backgroundPrimary);
 
@@ -426,12 +424,6 @@ input[disabled] {
   background-color: var(--backgroundSecondary);
   flex-basis: 18%;
   height: 100vh;
-}
-
-.section {
-  display: flex;
-  align-items: center;
-  padding: 1.2vw 1vw;
 }
 
 .section:last-child {

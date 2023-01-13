@@ -62,9 +62,11 @@ export default function TotalApplications(dateValue) {
 
       //
       let eventlist = []
-      const { data } = await supabase.rpc('distinctevent')
+      const { data, error } = await supabase
+            .from('campaigns')
+            .select()
       data.forEach(e => {
-        eventlist.push({ eventid: e.event })
+        eventlist.push({ eventid: e.title, eventCode: e.code })
       });
 
       //
@@ -92,12 +94,12 @@ export default function TotalApplications(dateValue) {
       let eventdistinct = []
 
       for (let i = 0; i < eventlist.length; i++) {
-        eventlabels.push(eventlist[i].eventid);
+        eventlabels.push(eventlist[i].eventCode);
         eventtotal.push(eventlist[i].total - eventlist[i].distinct);
         eventdistinct.push(eventlist[i].distinct);
       }
 
-      eventlabels.push('Total Unique Applications')
+      eventlabels.push('Total Unique')
       for (let i = 0; i < eventtotal.length; i++) { eventuniquetotal.push(0) }
       eventuniquetotal.push(distinctusercount)
 

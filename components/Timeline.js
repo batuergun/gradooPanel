@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 let graphoptions = {
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     datalabels: {
       display: false,

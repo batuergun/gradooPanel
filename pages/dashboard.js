@@ -105,47 +105,46 @@ export default function Dashboard(session) {
 
   return (
     <>
-      <Sidebar activeMenu={'Summary'}/>
+      <Sidebar activeMenu={'Summary'} />
 
-      <div className="container">
-        <div className="header">
-          <div className="title">
-            <img src="/img/summary2.svg" />
-            <h2 className="flex items-center text-lg font-medium">Summary</h2>
+      <div className="basis-[80%]">
+
+        <div className="h-24 text-inherit flex items-center justify-between flex-wrap px-8">
+
+          <div className="mt-[1vh] !flex text-xl">
+            <img src="/img/summary2.svg" className="w-[2.5vw] mr-[1vw] text-[#070707]" />
+            <h2 className="flex items-center text-lg font-medium text-fontPrimary">Summary</h2>
           </div>
-          <div
-            className="profile"
-            onClick={() => router.push({ pathname: "/account" })}
-          >
-            <h3 className="flex items-center text-base font-medium">{username}</h3>
+          <div className="px-[1vw] py-[.35vw] w-[14%] flex flex-wrap !justify-around hover:cursor-pointer bg-[#c9d0d6] rounded-full border-none" onClick={() => router.push({ pathname: "/account" })} >
+            <h3 className="flex items-center text-base font-medium text-fontPrimary">{username}</h3>
             {avatarUrl ? (
-              <img src={avatarUrl} alt="Avatar" className="avatar image" />
+              <img src={avatarUrl} className="ml-[.8vw] w-[3vw] h-[3vw] rounded-full overflow-hidden object-cover" />
             ) : (
               <div className="avatar no-image" />
             )}
           </div>
         </div>
 
-        <div className="px-6 text-[.5rem]">
+        <div className="px-8 text-[.5rem]">
           <Datepicker value={dateValue} onChange={handleValueChange} showShortcuts={true} showFooter={true} inputClassName="rounded-xl text-[.5rem]" />
         </div>
 
-        <div className="viewport">
-          <div className="graph graph1">
-            <TotalApplications startDate={dateValue.startDate} endDate={dateValue.endDate} />
-          </div>
-          <div className="graph graph2">
+        <div className="h-[80vh] p-8 grid grid-cols-6 grid-rows-2 content-around gap-4">
+
+          <div className="rounded-3xl bg-cardBackground shadow-xl p-4 flex items-center justify-center col-start-1 col-span-6 row-start-1">
             <Timeline startDate={''} endDate={''} />
           </div>
-          <div className="graph graph3">
-            <Temp startDate={dateValue.startDate} endDate={dateValue.endDate} />
+          <div className="rounded-3xl bg-cardBackground shadow-xl p-4 flex items-center justify-center col-start-1 col-span-2 row-start-2">
+            <TotalApplications startDate={dateValue.startDate} endDate={dateValue.endDate} />
           </div>
-          <div className="graph graph4">
+          <div className="rounded-3xl bg-cardBackground shadow-xl p-4 flex items-center justify-center col-start-3 col-span-2 row-start-2">
             <ClassChart type={'highschool'} />
           </div>
-          <div className="graph graph5">
+          <div className="rounded-3xl bg-cardBackground shadow-xl p-4 flex items-center justify-center col-start-5 col-span-2 row-start-2">
             <ClassChart type={'university'} />
           </div>
+
+
         </div>
       </div>
     </>
