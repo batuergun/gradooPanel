@@ -85,9 +85,12 @@ export default function CampaignList(session) {
     function renderCampaignList() {
         return <>
             {campaignList.map((campaign) => (
-                <div className="rounded-2xl bg-cardBackground p-5 m-4 hover:brightness-75 cursor-pointer" onClick={() => { setCampaign(campaign) }}>
-                    {campaign.title}
-                </div>
+                <>
+                    <div className="rounded-2xl bg-cardBackground p-5 m-4 hover:brightness-75 cursor-pointer" onClick={() => { setCampaign(campaign) }}>
+                        {campaign.title}
+                    </div>
+                </>
+
             ))}
         </>
     }
