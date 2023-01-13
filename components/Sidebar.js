@@ -51,7 +51,7 @@ export default function Sidebar(options) {
                 </Search>
 
                 <Campaigns>
-                    <div className="section campaigns">
+                    <div className="section campaigns" onClick={() => router.push({ pathname: "/campaigns" })}>
                         <img src="/img/summary.svg" className="icon" />
                         <h2>Campaigns</h2>
                     </div>
