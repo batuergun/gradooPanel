@@ -97,7 +97,15 @@ export default function CampaignList(session) {
 
     function campaignPage() {
         return <>
-            {selectedCampaign.title}
+            <div className="rounded-2xl bg-cardBackground p-5 m-4" >
+                {selectedCampaign.title}
+
+                <div className="rounded-xl bg-backgroundPrimary p-10 mt-5">
+                    <h2 className="text-fontPrimary">[ Campaign Data ]</h2>
+                </div>
+
+
+            </div>
         </>
     }
 

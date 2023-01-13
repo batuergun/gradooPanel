@@ -360,7 +360,7 @@ export default function Search(session) {
                 </div>
 
                 <div className="flex-col">
-                    <div className="flex w-full h-8 justify-evenly px-8 mt-1 text-sm">
+                    <div className="flex h-8 justify-evenly px-7 mt-4 text-sm items-center">
 
                         <div className="flex grow basis-14">
                             <Select isClearable isMulti styles={colourStyles} placeholder={'Event'} options={eventoptions} onChange={eventchange} />
@@ -382,13 +382,13 @@ export default function Search(session) {
                             <Select isClearable isMulti styles={colourStyles} placeholder={'Class'} options={classoptions} onChange={classchange} />
                         </div>
 
-                        <div className="flex bg-activeMenu rounded-xl text-fontSecondary w-8  h-8 mt-1 justify-center hover:cursor-pointer hover:bg-dropShadow" onClick={search}>
+                        <div className="flex bg-activeMenu rounded-xl text-fontSecondary w-8 h-8 justify-center hover:cursor-pointer hover:bg-dropShadow" onClick={search}>
                             <img src="/img/query.svg" className="w-4" />
                         </div>
 
                     </div>
 
-                    <div className="flex mt-10 p-8">
+                    <div className="flex mt-2 p-8">
                         <div className="flex bg-cardBackground p-4 text-fontPrimary rounded-xl">
                             <p className="text-current font-semibold">{schools.length}</p>
                             <p className="text-current ml-1"> result(s) found.</p>
