@@ -1,8 +1,21 @@
 import { useState, useEffect } from "react";
 import { useUser, useSupabaseClient, useSession } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
+import { Line } from "react-chartjs-2";
 
 import Sidebar from '../components/Sidebar'
+import Datepicker from "react-tailwindcss-datepicker";
+
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, BarElement, } from "chart.js";
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
+
+let graphoptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { datalabels: { display: false, }, legend: { position: "top", }, },
+    title: { display: false, text: "Applications timeline", },
+    scales: { x: { display: true, title: { display: true, }, }, y: { display: true, title: { display: true, text: "Applications", }, suggestedMin: 0, }, }
+}
 
 export default function CampaignList(session) {
 
@@ -16,13 +29,69 @@ export default function CampaignList(session) {
 
     const [campaignList, setCampaignList] = useState([]);
     const [listRender, setListRender] = useState(true)
-    const [selectedCampaign, setSelectedCampaign] = useState({})
+    const [selectedCampaign, setSelectedCampaign] = useState(null)
+
+    const [dateValue, setDateValue] = useState({
+        startDate: new Date(new Date().setDate(new Date().getDate() - 14)).toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0]
+    });
+
+    const handleValueChange = (dateValue) => {
+        setDateValue({
+            startDate: dateValue.startDate,
+            endDate: dateValue.endDate
+        })
+    }
+
+    const [graphdata, setgraphdata] = useState({
+        labels: [],
+        datasets: [],
+    });
 
     useEffect(() => {
         getProfile();
         getCampaignList()
 
-    }, [session]);
+        async function geteventcount() {
+            let r = Math.floor(Math.random() * 255); let g = Math.floor(Math.random() * 255); let b = Math.floor(Math.random() * 255);
+            let randomColor = 'rgba(' + r + ',' + g + ',' + b + ',0.9)'
+
+            if (selectedCampaign !== null) {
+                var datasetCache = []
+                var timelineListCache = []
+
+                const { data, error } = await supabase.rpc('timeline_query', { eventname: selectedCampaign.title, from_input: dateValue.startDate, until_input: dateValue.endDate })
+
+                let submissionCountList = []
+                for (const day in data) {
+                    if (Object.hasOwnProperty.call(data, day)) {
+                        const element = data[day];
+                        timelineListCache.push(element.date)
+                        submissionCountList.push(element.submission_count)
+                    }
+                }
+
+                datasetCache = [{
+                    label: selectedCampaign.title,
+                    data: submissionCountList,
+                    fill: false,
+                    pointStyle: 'circle',
+                    pointRadius: 3,
+                    pointHoverRadius: 7,
+                    type: 'line',
+                    borderColor: randomColor,
+                    backgroundColor: randomColor
+                }]
+
+                setgraphdata({
+                    labels: timelineListCache,
+                    datasets: datasetCache,
+                })
+            }
+        }
+        geteventcount()
+
+    }, [session, selectedCampaign, dateValue]);
 
     async function getProfile() {
         try {
@@ -71,13 +140,10 @@ export default function CampaignList(session) {
         const { data, error } = await supabase
             .from('campaigns')
             .select()
-
-        console.log(data)
         setCampaignList(data)
     }
 
     const setCampaign = props => {
-        console.log(props)
         setListRender(false)
         setSelectedCampaign(props)
     }
@@ -86,7 +152,7 @@ export default function CampaignList(session) {
         return <>
             {campaignList.map((campaign) => (
                 <>
-                    <div className="rounded-2xl bg-cardBackground p-5 m-4 hover:brightness-75 cursor-pointer" onClick={() => { setCampaign(campaign) }}>
+                    <div className="rounded-2xl bg-cardBackground p-4 mt-4 text-base hover:brightness-75 cursor-pointer" onClick={() => { setCampaign(campaign) }}>
                         {campaign.title}
                     </div>
                 </>
@@ -97,13 +163,12 @@ export default function CampaignList(session) {
 
     function campaignPage() {
         return <>
-            <div className="rounded-2xl bg-cardBackground p-5 m-4" >
+            <div className="rounded-2xl bg-cardBackground p-4 mt-4" >
                 {selectedCampaign.title}
 
-                <div className="rounded-xl bg-backgroundPrimary p-10 mt-5">
-                    <h2 className="text-fontPrimary">[ Campaign Data ]</h2>
+                <div className="rounded-xl bg-backgroundPrimary p-2 mt-5 h-[40vh]">
+                    <Line options={graphoptions} data={graphdata} />
                 </div>
-
 
             </div>
         </>
@@ -124,7 +189,14 @@ export default function CampaignList(session) {
                 </div>
             </div>
 
-            {listRender ? <>{renderCampaignList()}</> : <>{campaignPage()}</>}
+            <div className="px-8 text-[.5rem]">
+                <Datepicker value={dateValue} onChange={handleValueChange} showShortcuts={true} showFooter={true} inputClassName="rounded-xl text-[.5rem]" />
+            </div>
+
+            <div className="px-8">
+                {listRender ? <>{renderCampaignList()}</> : <>{campaignPage()}</>}
+            </div>
+
 
 
         </div>

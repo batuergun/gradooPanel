@@ -5,34 +5,9 @@ import { useEffect, useState } from "react";
 let graphoptions = {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: {
-        datalabels: {
-            display: false,
-        },
-        legend: {
-            position: "top",
-        },
-    },
-    title: {
-        display: false,
-        text: "Applications timeline",
-    },
-    scales: {
-        x: {
-            display: true,
-            title: {
-                display: true,
-            },
-        },
-        y: {
-            display: true,
-            title: {
-                display: true,
-                text: "Applications",
-            },
-            suggestedMin: 0,
-        },
-    }
+    plugins: { datalabels: { display: false, }, legend: { position: "top", }, },
+    title: { display: false, text: "Applications timeline", },
+    scales: { x: { display: true, title: { display: true, }, }, y: { display: true, title: { display: true, text: "Applications", }, suggestedMin: 0, }, }
 }
 
 export default function TimelineV2(dateValue) {
@@ -106,7 +81,6 @@ export default function TimelineV2(dateValue) {
             }
         }
         geteventcount()
-        console.log(graphdata)
 
     }, [dateValue])
 

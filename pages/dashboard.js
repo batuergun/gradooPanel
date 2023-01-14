@@ -3,28 +3,8 @@ import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Router, useRouter } from "next/router";
 import Datepicker from "react-tailwindcss-datepicker";
 
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  BarElement,
-} from "chart.js";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, BarElement, } from "chart.js";
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
 import Sidebar from '../components/Sidebar'
 import TotalApplications from "../components/TotalApplications.js";
