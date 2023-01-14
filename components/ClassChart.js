@@ -76,7 +76,7 @@ export default function ClassChart(options) {
                     }
                 }
             });
-
+            
             hs_setgraphdata({
                 labels: ['9', '10', '11', '12', 'Mezun', 'Hazirlik'],
                 datasets: [

@@ -42,6 +42,8 @@ export default function TimelineV2(dateValue) {
     const [timelineList, setTimeline] = useState([])
     const [datasetList, setDatasetList] = useState([])
 
+    const [reload, setReload] = useState(false)
+
     const [graphdata, setgraphdata] = useState({
         labels: [],
         datasets: [],
@@ -49,7 +51,7 @@ export default function TimelineV2(dateValue) {
 
     useEffect(() => {
 
-        async function geteventlist() {
+        async function getCampaignList() {
             const { data, error } = await supabase
                 .from('campaigns')
                 .select()
@@ -57,50 +59,54 @@ export default function TimelineV2(dateValue) {
         }
 
         async function geteventcount() {
-            await geteventlist()
+
+            await getCampaignList()
 
             if (campaignList.length > 0) {
-
                 var datasetListCache = []
+                var timelineListCache = []
 
-                campaignList.forEach(async campaign => {
-                    const { data, error } = await supabase.rpc('timeline_query', { eventname: campaign.title, from_input: dateValue.startDate, until_input: dateValue.endDate })
+                for (const campaign in campaignList) {
+                    if (Object.hasOwnProperty.call(campaignList, campaign)) {
+                        const element = campaignList[campaign];
 
-                    if (campaign.id == 1) {
-                        var timelineListCache = []
-                        data.forEach(day => { timelineList.push(day.date) })
-                        setTimeline(timelineListCache)
+                        const { data, error } = await supabase.rpc('timeline_query', { eventname: element.title, from_input: dateValue.startDate, until_input: dateValue.endDate })
+
+                        if (element.id == 1) {
+                            data.forEach(day => { timelineListCache.push(day.date) })
+                            //setTimeline(timelineListCache)
+                        }
+
+                        let submissionCountList = []
+                        data.forEach(day => { submissionCountList.push(day.submission_count) })
+
+                        let r = Math.floor(Math.random() * 255); let g = Math.floor(Math.random() * 255); let b = Math.floor(Math.random() * 255);
+                        let randomColor = 'rgba(' + r + ',' + g + ',' + b + ',0.9)'
+
+                        datasetListCache.push({
+                            label: element.title,
+                            data: submissionCountList,
+                            fill: false,
+                            pointStyle: 'circle',
+                            pointRadius: 3,
+                            pointHoverRadius: 7,
+                            type: 'line',
+                            borderColor: randomColor,
+                            backgroundColor: randomColor
+                        })
+
                     }
+                }
 
-                    let submissionCountList = []
-                    data.forEach(day => { submissionCountList.push(day.submission_count) })
+                setgraphdata({
+                    labels: timelineListCache,
+                    datasets: datasetListCache,
+                })
 
-                    let r = Math.floor(Math.random() * 255); let g = Math.floor(Math.random() * 255); let b = Math.floor(Math.random() * 255);
-                    let randomColor = 'rgba(' + r + ',' + g + ',' + b + ',0.9)'
-
-                    datasetListCache.push({
-                        label: campaign.title,
-                        data: submissionCountList,
-                        fill: false,
-                        pointStyle: 'circle',
-                        pointRadius: 3,
-                        pointHoverRadius: 7,
-                        type: 'line',
-                        borderColor: randomColor,
-                        backgroundColor: randomColor
-                    })
-                    console.log(datasetListCache)
-                });
-
-                setDatasetList(datasetListCache)
             }
-
-            setgraphdata({
-                labels: timelineList,
-                datasets: datasetList,
-            })
         }
         geteventcount()
+        console.log(graphdata)
 
     }, [dateValue])
 
