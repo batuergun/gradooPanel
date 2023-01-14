@@ -135,6 +135,8 @@ export default function Search(session) {
         { value: '2', label: '2. sınıf' },
         { value: '3', label: '3. sınıf' },
         { value: '4', label: '4. sınıf' },
+        { value: 'mezun & Lise', label: 'Mezun (Lise)' },
+        { value: 'mezun & Üniversite', label: 'Mezun (Üniversite)' },
     ]
 
     // const usertypeoptions = [

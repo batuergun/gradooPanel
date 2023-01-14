@@ -52,7 +52,7 @@ export default function ClassChart(options) {
             const { data } = await supabase.rpc('classinfo_by_time', {from_input: options.startDate, until_input: options.endDate})
 
             let highschoollist = { 9: 0, 10: 0, 11: 0, 12: 0, 'mezun': 0, 'hazirlik': 0 }
-            let universitylist = { 1: 0, 2: 0, 3: 0, 4: 0, 'hazirlik': 0 }
+            let universitylist = { 1: 0, 2: 0, 3: 0, 4: 0, 'mezun': 0, 'hazirlik': 0 }
 
             data.forEach(row => {
                 if (row.usertype === 'Üniversite') {
@@ -61,6 +61,7 @@ export default function ClassChart(options) {
                         case "2. sınıf": universitylist['2'] = row.count; break;
                         case "3. sınıf": universitylist['3'] = row.count; break;
                         case "4. sınıf": universitylist['4'] = row.count; break;
+                        case "Mezun": universitylist['mezun'] = row.count; break;
                         case "Hazırlık": universitylist['hazirlik'] = row.count; break;
                         default: break;
                     }
@@ -99,11 +100,11 @@ export default function ClassChart(options) {
             })
 
             u_setgraphdata({
-                labels: ['1', '2', '3', '4', 'Hazirlik'],
+                labels: ['1', '2', '3', '4', 'Mezun', 'Hazirlik'],
                 datasets: [
                     {
                         label: 'University',
-                        data: [universitylist['1'], universitylist['2'], universitylist['3'], universitylist['4'], universitylist['hazirlik']],
+                        data: [universitylist['1'], universitylist['2'], universitylist['3'], universitylist['4'], highschoollist['mezun'], universitylist['hazirlik']],
                         backgroundColor: [
                             "rgba(54, 162, 235, 0.2)",
                             "rgba(255, 159, 64, 0.2)",
