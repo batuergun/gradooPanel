@@ -7,6 +7,11 @@ import Select from 'react-select';
 import Sidebar from '../components/Sidebar'
 import Datepicker from "react-tailwindcss-datepicker";
 
+import { Bar } from "react-chartjs-2";
+let graphoptions = { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } } }
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, BarElement, } from "chart.js";
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
+
 export default function Search(session) {
     const supabase = useSupabaseClient();
     const user = useUser();
@@ -19,6 +24,13 @@ export default function Search(session) {
 
     const [query, setQuery] = useState({ events: [], cities: [], schools: [], types: [] })
     const [schools, setSchools] = useState([])
+
+    const [renderDetail, setRenderDetail] = useState(false)
+    const [selectedSchool, setSelectedSchool] = useState([])
+    const [graphdata, setGraphData] = useState({
+        labels: [],
+        datasets: [],
+    })
 
     const [dateValue, setDateValue] = useState({
         startDate: new Date(new Date().setDate(new Date().getDate() - 14)).toISOString().split('T')[0],
@@ -34,7 +46,9 @@ export default function Search(session) {
 
     useEffect(() => {
         getProfile();
-    }, [session]);
+        if (selectedSchool != []) { getSchoolDetails() }
+
+    }, [session, selectedSchool]);
 
     async function getProfile() {
         try {
@@ -138,12 +152,6 @@ export default function Search(session) {
         { value: 'mezun & Lise', label: 'Mezun (Lise)' },
         { value: 'mezun & Üniversite', label: 'Mezun (Üniversite)' },
     ]
-
-    // const usertypeoptions = [
-    //     { value: 'Lise', label: 'Lise' },
-    //     { value: 'Üniversite', label: 'Üniversite' },
-    //     { value: 'Diğer', label: 'Diğer' },
-    // ]
 
     const usertypeoptions = [
         { value: 'lise', label: 'High School' },
@@ -330,20 +338,126 @@ export default function Search(session) {
         fullquery()
     }
 
+    const setSchool = props => {
+        setRenderDetail(true)
+        setSelectedSchool(props)
+    }
+
+    const getSchoolDetails = async () => {
+        let { data, error } = await supabase
+            .rpc('classinfo_by_school', {
+                from_input: dateValue.startDate,
+                schoolname: selectedSchool.school,
+                until_input: dateValue.endDate
+            })
+
+        let schoolUsertype
+        if (data != null) { schoolUsertype = data[0].usertype }
+
+        let highschoollist = { 9: 0, 10: 0, 11: 0, 12: 0, 'mezun': 0, 'hazirlik': 0 }
+        let universitylist = { 1: 0, 2: 0, 3: 0, 4: 0, 'mezun': 0, 'hazirlik': 0 }
+
+        if (data != null) {
+            data.forEach(row => {
+                if (schoolUsertype === 'Üniversite') {
+                    switch (row.class) {
+                        case "1. sınıf": universitylist['1'] = row.count; break;
+                        case "2. sınıf": universitylist['2'] = row.count; break;
+                        case "3. sınıf": universitylist['3'] = row.count; break;
+                        case "4. sınıf": universitylist['4'] = row.count; break;
+                        case "Mezun": universitylist['mezun'] = row.count; break;
+                        case "Hazırlık": universitylist['hazirlik'] = row.count; break;
+                        default: break;
+                    }
+                } else if (schoolUsertype === "Lise / Mezun") {
+                    switch (row.class) {
+                        case "9": highschoollist['9'] = row.count; break;
+                        case "10": highschoollist['10'] = row.count; break;
+                        case "11": highschoollist['11'] = row.count; break;
+                        case "12": highschoollist['12'] = row.count; break;
+                        case "Mezun": highschoollist['mezun'] = row.count; break;
+                        case "Hazırlık": highschoollist['hazirlik'] = row.count; break;
+                        default: break;
+                    }
+                }
+            });
+        }
+
+        if (schoolUsertype === "Lise / Mezun") {
+            setGraphData({
+                labels: ['9', '10', '11', '12', 'Mezun', 'Hazirlik'],
+                datasets: [
+                    {
+                        label: 'High School',
+                        data: [highschoollist['9'], highschoollist['10'], highschoollist['11'], highschoollist['12'], highschoollist['mezun'], highschoollist['hazirlik']],
+                        backgroundColor: [
+                            "rgba(54, 162, 235, 0.2)",
+                            "rgba(255, 159, 64, 0.2)",
+                            "rgba(255, 206, 86, 0.2)",
+                        ],
+                        borderColor: [
+                            "rgba(54, 162, 235, 1)",
+                            "rgba(255, 159, 64, 1)",
+                            "rgba(255, 206, 86, 1)",
+                        ],
+                        borderWidth: 1,
+                    }
+                ],
+            })
+        } else if (schoolUsertype === "Üniversite") {
+            setGraphData({
+                labels: ['1', '2', '3', '4', 'Mezun', 'Hazirlik'],
+                datasets: [
+                    {
+                        label: 'University',
+                        data: [universitylist['1'], universitylist['2'], universitylist['3'], universitylist['4'], universitylist['mezun'], universitylist['hazirlik']],
+                        backgroundColor: [
+                            "rgba(54, 162, 235, 0.2)",
+                            "rgba(255, 159, 64, 0.2)",
+                            "rgba(255, 206, 86, 0.2)",
+                        ],
+                        borderColor: [
+                            "rgba(54, 162, 235, 1)",
+                            "rgba(255, 159, 64, 1)",
+                            "rgba(255, 206, 86, 1)",
+                        ],
+                        borderWidth: 1,
+                    }
+                ],
+            })
+        }
+    }
+
+    function renderDetails() {
+        return <>
+            <div className="absolute left-0 top-0 backdrop-blur-sm w-full h-full z-50 flex justify-center items-center">
+                <div className="relative bg-backgroundPrimary rounded-md basis-[90%] h-[90%] p-7 border-active-menu border-2 drop-shadow-lg">
+                    <h2 className="absolute top-0 right-0 mt-3 mr-5 text-primary font-black text-base hover:underline hover:cursor-pointer" onClick={() => { setRenderDetail(false) }}>X</h2>
+
+                    <h2 className="text-inherit font-bold text-2xl">{selectedSchool.school} - {selectedSchool.city}</h2>
+                    <h2 className="text-inherit font-light text-base pt-1">{selectedSchool.count} application</h2>
+
+                    <div className="h-96 p-5 mt-12 bg-cardBackground rounded-md ">
+                        <Bar options={graphoptions} data={graphdata} />
+                    </div>
+
+                </div>
+            </div>
+        </>
+    }
+
     return (
         <>
-            <Sidebar activeMenu={'Search'} />
+            {renderDetail ? <>{renderDetails()}</> : <></>}
 
+            <Sidebar activeMenu={'Search'} />
             <div className="container">
                 <div className="header">
                     <div className="title">
                         <img src="/img/summary2.svg" />
                         <h2 className="flex items-center text-lg font-medium">Search</h2>
                     </div>
-                    <div
-                        className="profile"
-                        onClick={() => router.push({ pathname: "/account" })}
-                    >
+                    <div className="profile" onClick={() => router.push({ pathname: "/account" })}>
                         <h3 className="flex items-center text-base font-medium">{username}</h3>
                         {avatar_url ? (
                             <>
@@ -356,6 +470,8 @@ export default function Search(session) {
                         )}
                     </div>
                 </div>
+
+
 
                 <div className="px-8 text-[.5rem]">
                     <Datepicker value={dateValue} onChange={handleValueChange} showShortcuts={true} showFooter={true} inputClassName="rounded-xl text-[.5rem]" />
@@ -413,7 +529,7 @@ export default function Search(session) {
 
                                     {schools.map(school => (
                                         <>
-                                            <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer">
+                                            <div className="table-row mt-1 text-fontPrimary hover:bg-dropShadow hover:text-fontSecondary hover:cursor-pointer" onClick={() => { setSchool(school) }}>
                                                 <div className="table-cell text-current text-sm">{school.school}</div>
                                                 <div className="table-cell text-current text-sm text-center">{school.count}</div>
                                                 <div className="table-cell text-current text-sm text-center">{school.city}</div>
@@ -423,13 +539,10 @@ export default function Search(session) {
 
 
                                 </div>
-
                             </div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </>
     );
