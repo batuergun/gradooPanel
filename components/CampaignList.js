@@ -148,6 +148,11 @@ export default function CampaignList(session) {
         setSelectedCampaign(props)
     }
 
+    const clearSelection = props => {
+        setListRender(true)
+        setSelectedCampaign({})
+    }
+
     function renderCampaignList() {
         return <>
             {campaignList.map((campaign) => (
@@ -163,6 +168,7 @@ export default function CampaignList(session) {
 
     function campaignPage() {
         return <>
+            <div className="bg-cardBackground rounded-2xl px-4 py-2 mt-4 cursor-pointer w-28 font-semibold text-sm hover:brightness-75" onClick={clearSelection}> &lt;- back to list</div>
             <div className="rounded-2xl bg-cardBackground p-4 mt-4" >
                 {selectedCampaign.title}
 
