@@ -66,8 +66,8 @@ export default function TimelineV2(dateValue) {
                             pointRadius: 3,
                             pointHoverRadius: 7,
                             type: 'line',
-                            borderColor: randomColor,
-                            backgroundColor: randomColor
+                            borderColor: element.themeColor,
+                            backgroundColor: element.themeColor
                         })
 
                     }
