@@ -202,17 +202,18 @@ export default async function reload(req, res) {
     });
   }
 
-  //
-  const { data } = await supabase
-    .from('campaigns')
-    .select('*')
+  // Reload for all campaigns
+  // const { data } = await supabase
+  //   .from('campaigns')
+  //   .select('*')
 
-  deleteTable('applications')
-  for await (let campaign of data) {
-    await saveQuery(campaign.typeformID)
-  }
+  //deleteTable('applications')
+  // for await (let campaign of data) {
+  //   await saveQuery(campaign.typeformID)
+  // }
 
-
+  // Individual reload
+  //await saveQuery('{typeformID}')
 
   res.status(200).json('OK')
 }
