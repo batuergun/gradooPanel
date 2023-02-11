@@ -117,6 +117,10 @@ export default function Search(session) {
         { value: 'Learn How to Learn', label: 'Learn How to Learn' },
         { value: 'Gradoo x Derece Atölyesi', label: 'Gradoo x Derece Atölyesi' },
         { value: 'SS v.2', label: 'Startup School v2' },
+        { value: 'LinkedIn 101', label: 'LinkedIn 101' },
+        { value: 'Sürdürülebilir Gelecek', label: 'Sürdürülebilir Gelecek!' },
+        { value: 'TikTok Programı', label: 'TikTok Programı' },
+        { value: 'Study Abroad', label: 'Study Abroad' },
     ]
 
     const cityoptions = [
