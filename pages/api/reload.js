@@ -170,6 +170,9 @@ export default async function reload(req, res) {
 
         console.log(counter, 'string - ', school, highschool_city, 'data - ', resultdata)
 
+        // Exceptions - Old format
+        if (usertype == 'Lise / Mezun') { usertype = 'Lise' }
+
         if (schoolquery.length > 0) {
           usercache = [...usercache, {
             firstname: firstname,

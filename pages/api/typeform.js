@@ -104,6 +104,9 @@ export default async function webhookReceiver(req, res) {
 
     console.log('string - ', searchstring, 'data - ', data)
 
+    // Exceptions - Old format
+    if (usertype == 'Lise / Mezun') { usertype = 'Lise' }
+
     const { error } = await supabase
         .from('applications')
         .insert({

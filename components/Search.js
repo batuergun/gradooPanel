@@ -149,13 +149,12 @@ export default function Search(session) {
         { value: '10', label: '10' },
         { value: '11', label: '11' },
         { value: '12', label: '12' },
+        { value: 'mezun & Lise', label: 'Mezun' },
         { value: 'Hazırlık & Üniversite', label: 'Hazırlık (Üniversite)' },
         { value: '1', label: '1. sınıf' },
         { value: '2', label: '2. sınıf' },
         { value: '3', label: '3. sınıf' },
-        { value: '4', label: '4. sınıf' },
-        { value: 'mezun & Lise', label: 'Mezun (Lise)' },
-        { value: 'mezun & Üniversite', label: 'Mezun (Üniversite)' },
+        { value: '4', label: '4. sınıf' }
     ]
 
     const usertypeoptions = [
@@ -360,7 +359,7 @@ export default function Search(session) {
         if (data != null) { schoolUsertype = data[0].usertype }
 
         let highschoollist = { 9: 0, 10: 0, 11: 0, 12: 0, 'mezun': 0, 'hazirlik': 0 }
-        let universitylist = { 1: 0, 2: 0, 3: 0, 4: 0, 'mezun': 0, 'hazirlik': 0 }
+        let universitylist = { 1: 0, 2: 0, 3: 0, 4: 0, 'hazirlik': 0 }
 
         if (data != null) {
             data.forEach(row => {
@@ -370,11 +369,10 @@ export default function Search(session) {
                         case "2. sınıf": universitylist['2'] = row.count; break;
                         case "3. sınıf": universitylist['3'] = row.count; break;
                         case "4. sınıf": universitylist['4'] = row.count; break;
-                        case "Mezun": universitylist['mezun'] = row.count; break;
                         case "Hazırlık": universitylist['hazirlik'] = row.count; break;
                         default: break;
                     }
-                } else if (schoolUsertype === "Lise / Mezun") {
+                } else if (schoolUsertype === "Lise") {
                     switch (row.class) {
                         case "9": highschoollist['9'] = row.count; break;
                         case "10": highschoollist['10'] = row.count; break;
@@ -388,7 +386,7 @@ export default function Search(session) {
             });
         }
 
-        if (schoolUsertype === "Lise / Mezun") {
+        if (schoolUsertype === "Lise") {
             setGraphData({
                 labels: ['9', '10', '11', '12', 'Mezun', 'Hazirlik'],
                 datasets: [
@@ -411,11 +409,11 @@ export default function Search(session) {
             })
         } else if (schoolUsertype === "Üniversite") {
             setGraphData({
-                labels: ['1', '2', '3', '4', 'Mezun', 'Hazirlik'],
+                labels: ['1', '2', '3', '4', 'Hazirlik'],
                 datasets: [
                     {
                         label: 'University',
-                        data: [universitylist['1'], universitylist['2'], universitylist['3'], universitylist['4'], universitylist['mezun'], universitylist['hazirlik']],
+                        data: [universitylist['1'], universitylist['2'], universitylist['3'], universitylist['4'], universitylist['hazirlik']],
                         backgroundColor: [
                             "rgba(54, 162, 235, 0.2)",
                             "rgba(255, 159, 64, 0.2)",
