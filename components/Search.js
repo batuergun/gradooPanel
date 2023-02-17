@@ -114,6 +114,7 @@ export default function Search(session) {
     };
 
     const eventoptions = [
+        { value: 'lise üniversite diğer', label: 'Select all' },
         { value: 'Learn How to Learn', label: 'Learn How to Learn' },
         { value: 'Gradoo x Derece Atölyesi', label: 'Gradoo x Derece Atölyesi' },
         { value: 'SS v.2', label: 'Startup School v2' },
