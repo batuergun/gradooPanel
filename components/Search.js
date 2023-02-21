@@ -356,11 +356,11 @@ export default function Search(session) {
 
     const getSchoolDetails = async () => {
         // let schoolDetailQuery = '(' + selectedSchool.sid + ' & ' + searchQuery.substring(1)
-        let schoolDetailQuery = '(' + JSON.stringify(selectedSchool.school).replaceAll(' ', ' & ') + ' ) & ' + searchQuery
         let { data, error } = await supabase
             .rpc('classinfo_by_school', {
                 from_input: dateValue.startDate,
-                schoolname: schoolDetailQuery,
+                schoolqueryinput: searchQuery,
+                schoolname: selectedSchool.school,
                 until_input: dateValue.endDate
             })
 
