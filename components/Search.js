@@ -24,9 +24,14 @@ export default function Search(session) {
 
     const [query, setQuery] = useState({ events: [], cities: [], schools: [], types: [] })
     const [schools, setSchools] = useState([])
+    const [searchQuery, setSearchQuery] = useState('')
 
     const [renderDetail, setRenderDetail] = useState(false)
-    const [selectedSchool, setSelectedSchool] = useState([])
+    const [selectedSchool, setSelectedSchool] = useState({
+        "school": "",
+        "city": "",
+        "count": 0
+    })
     const [graphdata, setGraphData] = useState({
         labels: [],
         datasets: [],
@@ -327,6 +332,7 @@ export default function Search(session) {
                 console.log(data)
 
                 console.log('querystring - ', searchstring.substring(0, searchstring.length - 3))
+                setSearchQuery(searchstring.substring(0, searchstring.length - 3))
 
                 if (data !== null) {
                     data.forEach(e => {
@@ -343,20 +349,23 @@ export default function Search(session) {
     }
 
     const setSchool = props => {
+        console.log(props)
         setRenderDetail(true)
         setSelectedSchool(props)
     }
 
     const getSchoolDetails = async () => {
+        // let schoolDetailQuery = '(' + selectedSchool.sid + ' & ' + searchQuery.substring(1)
+        let schoolDetailQuery = '(' + JSON.stringify(selectedSchool.school).replaceAll(' ', ' & ') + ' ) & ' + searchQuery
         let { data, error } = await supabase
             .rpc('classinfo_by_school', {
                 from_input: dateValue.startDate,
-                schoolname: selectedSchool.school,
+                schoolname: schoolDetailQuery,
                 until_input: dateValue.endDate
             })
 
         let schoolUsertype
-        if (data != null) { schoolUsertype = data[0].usertype }
+        if (data != null && data.length > 0) { schoolUsertype = data[0].usertype }
 
         let highschoollist = { 9: 0, 10: 0, 11: 0, 12: 0, 'mezun': 0, 'hazirlik': 0 }
         let universitylist = { 1: 0, 2: 0, 3: 0, 4: 0, 'hazirlik': 0 }

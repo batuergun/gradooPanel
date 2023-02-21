@@ -66,3 +66,26 @@ $$ language sql
   order by ts_rank(to_tsvector(unaccent(name) || ' ' || unaccent(city) || ' ' || unaccent(type)), plainto_tsquery(unaccent(input))) desc
   limit 1
 ```
+
+## renderschoollist
+```sql
+create or replace function renderschoollist_by_time(input text, from_input timestamp, until_input timestamp) returns table(school text, city text, count bigint) as $$
+  select school, city, count 
+  from (
+    select school, city, count(*)
+    from (
+      select distinct on (email) email, school, city, submitted_at
+      from applications
+      where to_tsvector(unaccent(event) || ' ' || 
+                        unaccent(city) || ' ' || 
+                        unaccent(school) || ' ' || 
+                        unaccent(usertype) || ' ' || 
+                        unaccent(class)) @@ to_tsquery(unaccent(input))
+      and submitted_at >= from_input
+      and submitted_at <= until_input
+    ) as temp
+    group by school, city
+  ) as temp 
+  order by count desc
+$$ language sql 
+```
