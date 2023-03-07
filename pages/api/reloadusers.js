@@ -95,7 +95,7 @@ export default async function reloadusers(req, res) {
 
                 let school = []
                 var highschool_city = []
-                var schoolquery;
+                let schoolquery = '00000000-0000-0000-0000-000000000000';
 
                 submitted_at = user.submitted_at;
 
@@ -171,22 +171,21 @@ export default async function reloadusers(req, res) {
                 // Exceptions - Old format
                 if (usertype == 'Lise / Mezun') { usertype = 'Lise' }
 
-                if (typeof schoolquery != null && schoolquery.length > 0) {
-                    const { error } = await supabase
-                        .from('users')
-                        .upsert({
-                            phone: phone,
-                            firstname: firstname,
-                            lastname: lastname,
-                            email: email,
-                            usertype: usertype,
-                            school: schoolquery,
-                            city: citystring,
-                            class: schoolclass
-                        })
-                    console.log('user ', phone)
-                    if (error) { console.log(error) }
-                }
+                const { error } = await supabase
+                    .from('users')
+                    .upsert({
+                        phone: phone,
+                        firstname: firstname,
+                        lastname: lastname,
+                        email: email,
+                        usertype: usertype,
+                        school: schoolquery,
+                        raw_school_input: school,
+                        city: citystring,
+                        class: schoolclass
+                    })
+                console.log('user ', phone)
+                if (error) { console.log(error) }
                 counter += 1
             }
 
