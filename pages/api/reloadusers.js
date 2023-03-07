@@ -95,7 +95,7 @@ export default async function reloadusers(req, res) {
 
                 let school = []
                 var highschool_city = []
-                var schoolquery = " ";
+                var schoolquery;
 
                 submitted_at = user.submitted_at;
 
@@ -159,7 +159,7 @@ export default async function reloadusers(req, res) {
                 let citystring = ''
                 if (resultdata !== null) {
                     if (resultdata.length > 0) {
-                        schoolquery = resultdata[0].name
+                        schoolquery = resultdata[0].sid
                         citystring = citystring.concat(resultdata[0].city)
                     } else {
                         citystring = citystring.concat(highschool_city)
@@ -209,7 +209,7 @@ export default async function reloadusers(req, res) {
     // }
 
     // Individual reload
-    // await saveQuery(req.query.typeformID)
+    await saveQuery(req.query.typeformID)
 
     res.status(200).json('OK')
 }

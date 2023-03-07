@@ -44,15 +44,15 @@ $$ language sql;
 ```sql
 create index if not exists search_index on schools using gin (name gin_trgm_ops)
 
-create or replace function indexschool(input text, city_input text) returns table(name text, city text, score bigint) as $$
-  select name, city, (similarity(unaccent(input), unaccent(name)) + similarity(unaccent(city_input), unaccent(city))) as score from schools p
+create or replace function indexschool(input text, city_input text) returns table(sid text, name text, city text, score bigint) as $$
+  select sid, name, city, (similarity(unaccent(input), unaccent(name)) + similarity(unaccent(city_input), unaccent(city))) as score from schools p
   where unaccent(name) % unaccent(input) and unaccent(city) % unaccent(city_input)
   order by score desc
   limit 1
 $$ language sql
 
-create or replace function indexuniversity(input text) returns table(name text, city text) as $$
-  select name, city from schools
+create or replace function indexuniversity(input text) returns table(sid text, name text, city text) as $$
+  select sid, name, city from schools
   where to_tsvector(unaccent(name) || ' ' || unaccent(city) || ' ' || unaccent(type)) @@ to_tsquery(unaccent(input))
   order by ts_rank(to_tsvector(unaccent(name) || ' ' || unaccent(city) || ' ' || unaccent(type)), plainto_tsquery(unaccent(input))) desc
   limit 1
