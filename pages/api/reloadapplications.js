@@ -90,6 +90,14 @@ export default async function reloadapplications(req, res) {
                 var schoolclass = " ";
 
                 user.answers.forEach((answer) => {
+                    switch (answer.field.ref) {
+                        case "highschool-class":
+                            schoolclass = answer.text;
+                            break;
+                        case "university-class":
+                            schoolclass = answer.text;
+                            break;
+                    }
                     switch (answer.field.id) {
                         case firstnameID:
                             firstname = answer.text;
