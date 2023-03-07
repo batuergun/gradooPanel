@@ -209,7 +209,7 @@ export default async function reloadusers(req, res) {
     // }
 
     // Individual reload
-    await saveQuery(req.query.typeformID)
+    // await saveQuery(req.query.typeformID)
 
     res.status(200).json('OK')
 }
