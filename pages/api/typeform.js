@@ -32,7 +32,6 @@ export default async function webhookReceiver(req, res) {
     var phone = " ";
     var email = " ";
     var usertype = " ";
-    var school = " ";
     var submitted_at = " ";
     var highschool_city = " ";
     var university_program = " ";
