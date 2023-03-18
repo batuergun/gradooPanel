@@ -138,7 +138,7 @@ export default async function webhookReceiver(req, res) {
             phone: phone,
             email: email,
             event: eventID,
-            submitted_at: user.submitted_at,
+            submitted_at: submitted_at,
             class: schoolclass,
             user: currentUser.id
         })
