@@ -36,6 +36,7 @@ export default async function webhookReceiver(req, res) {
     var highschool_city = " ";
     var university_program = " ";
     var schoolclass = " ";
+    var searchstring = " "
 
     let school = []
     var highschool_city = []
@@ -76,7 +77,6 @@ export default async function webhookReceiver(req, res) {
 
     let resultdata = []
     if (usertype == 'Üniversite') {
-        let searchstring = ''
         if (school != " ") {
             let splitted = ''
             if (JSON.stringify(school).includes(' ')) {
