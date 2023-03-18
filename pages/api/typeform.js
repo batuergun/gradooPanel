@@ -38,6 +38,10 @@ export default async function webhookReceiver(req, res) {
     var university_program = " ";
     var schoolclass = " ";
 
+    let school = []
+    var highschool_city = []
+    let schoolquery = '00000000-0000-0000-0000-000000000000';
+
     var eventID = form_response.definition.title;
     submitted_at = form_response.submitted_at;
     firstname = form_response.answers[0].text;
@@ -71,34 +75,32 @@ export default async function webhookReceiver(req, res) {
         if (answer.field.type === "email") email = answer.email;
     });
 
-    let searchstring = ''
-    if (school != " ") {
-        let splitted = ''
-        if (JSON.stringify(school).includes(' ')) {
-            splitted = JSON.stringify(school).replaceAll(' ', ' & ')
-            searchstring = searchstring.concat(splitted)
-        } else { searchstring = searchstring.concat(JSON.stringify(school)) }
+    let resultdata = []
+    if (usertype == 'Üniversite') {
+        let searchstring = ''
+        if (school != " ") {
+            let splitted = ''
+            if (JSON.stringify(school).includes(' ')) {
+                splitted = JSON.stringify(school).replaceAll(' ', '& ')
+                searchstring = '( ' + searchstring.concat(splitted.replaceAll('"', '').replaceAll('-', ' ') + ' ) ')
+            } else { searchstring = '( ' + searchstring.concat(school) + ' ) ' }
+        }
+        const { data } = await supabase.rpc('indexuniversity', { input: searchstring })
+        resultdata = data
+    } else {
+        const { data } = await supabase.rpc('indexschool', { 'input': school, 'city_input': highschool_city })
+        resultdata = data
     }
-
-    if (highschool_city.length > 1) {
-        searchstring = searchstring.concat(' & ', highschool_city)
-    }
-
-    const { data } = await supabase.rpc('indexschool', { input: searchstring })
 
     let citystring = ''
-    let schoolquery = ''
-
-    if (data !== null) {
-        if (data.length > 0) {
-            schoolquery = data[0].name
-            citystring = citystring.concat(data[0].city)
+    if (resultdata !== null) {
+        if (resultdata.length > 0) {
+            schoolquery = resultdata[0].sid
+            citystring = citystring.concat(resultdata[0].city)
         } else {
-            schoolquery = school
             citystring = citystring.concat(highschool_city)
         }
     } else {
-        schoolquery = school
         citystring = citystring.concat(highschool_city)
     }
 
@@ -108,20 +110,44 @@ export default async function webhookReceiver(req, res) {
     if (usertype == 'Lise / Mezun') { usertype = 'Lise' }
 
     const { error } = await supabase
-        .from('applications')
+        .from('users')
+        .upsert({
+            phone: phone,
+            firstname: firstname,
+            lastname: lastname,
+            email: email,
+            usertype: usertype,
+            school: schoolquery,
+            raw_school_input: school,
+            city: citystring,
+            class: schoolclass
+        })
+    console.log('user ', phone)
+    if (error) { console.log(error) }
+
+    const { data: currentUser, indexError } = await supabase
+        .from('users')
+        .select('id, phone')
+        .eq('phone', phone)
+        .limit(1)
+        .single()
+    if (indexError) { console.log(indexError) }
+
+    const { applicationUpsertError } = await supabase
+        .from('applications_template')
         .insert({
             firstname: firstname,
             lastname: lastname,
             phone: phone,
             email: email,
-            usertype: usertype,
-            school: schoolquery,
             event: eventID,
-            submitted_at: submitted_at,
-            city: citystring,
-            class: schoolclass
+            submitted_at: user.submitted_at,
+            class: schoolclass,
+            user: currentUser.id
         })
+    if (applicationUpsertError) { console.log(applicationUpsertError) }
 
+    console.log(counter, 'User: ', currentUser.id, ' - ', currentUser.phone)
     res.status(200).json({ message: "OK" })
 }
 
