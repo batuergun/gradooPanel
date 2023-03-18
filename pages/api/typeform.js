@@ -103,8 +103,6 @@ export default async function webhookReceiver(req, res) {
         citystring = citystring.concat(highschool_city)
     }
 
-    console.log('string - ', searchstring, 'data - ', data)
-
     // Exceptions - Old format
     if (usertype == 'Lise / Mezun') { usertype = 'Lise' }
 
@@ -124,7 +122,7 @@ export default async function webhookReceiver(req, res) {
     console.log('user ', phone)
     if (error) { console.log(error) }
 
-    const { data: currentUser, indexError } = await supabase
+    const { currentUser, indexError } = await supabase
         .from('users')
         .select('id, phone')
         .eq('phone', phone)
