@@ -122,7 +122,7 @@ export default async function webhookReceiver(req, res) {
     console.log('user ', phone)
     if (error) { console.log(error) }
 
-    const { currentUser, indexError } = await supabase
+    const { data, indexError } = await supabase
         .from('users')
         .select('id, phone')
         .eq('phone', phone)
@@ -140,7 +140,7 @@ export default async function webhookReceiver(req, res) {
             event: eventID,
             submitted_at: submitted_at,
             class: schoolclass,
-            user: currentUser.id
+            user: data.id
         })
     if (applicationUpsertError) { console.log(applicationUpsertError) }
 
