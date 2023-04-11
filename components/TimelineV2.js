@@ -46,29 +46,36 @@ export default function TimelineV2(dateValue) {
                         const element = campaignList[campaign];
 
                         const { data, error } = await supabase.rpc('timeline_query', { eventname: element.title, from_input: dateValue.startDate, until_input: dateValue.endDate })
+                        console.log(element.title, data)
+
+                        let submissionCountList = []
+                        let applicationTotal = 0
 
                         if (element.id == 1) {
                             data.forEach(day => { timelineListCache.push(day.date) })
                             //setTimeline(timelineListCache)
                         }
 
-                        let submissionCountList = []
-                        data.forEach(day => { submissionCountList.push(day.submission_count) })
-
-                        let r = Math.floor(Math.random() * 255); let g = Math.floor(Math.random() * 255); let b = Math.floor(Math.random() * 255);
-                        let randomColor = 'rgba(' + r + ',' + g + ',' + b + ',0.9)'
-
-                        datasetListCache.push({
-                            label: element.title,
-                            data: submissionCountList,
-                            fill: false,
-                            pointStyle: 'circle',
-                            pointRadius: 3,
-                            pointHoverRadius: 7,
-                            type: 'line',
-                            borderColor: element.themeColor,
-                            backgroundColor: element.themeColor
+                        data.forEach(day => {
+                            applicationTotal += day.submission_count
+                            submissionCountList.push(day.submission_count)
                         })
+
+                        if (applicationTotal > 0) {
+                            datasetListCache.push({
+                                label: element.title,
+                                data: submissionCountList,
+                                fill: false,
+                                pointStyle: 'circle',
+                                pointRadius: 3,
+                                pointHoverRadius: 7,
+                                type: 'line',
+                                borderColor: element.themeColor,
+                                backgroundColor: element.themeColor
+                            })
+
+
+                        }
 
                     }
                 }
