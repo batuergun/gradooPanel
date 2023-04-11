@@ -65,7 +65,7 @@ export default function ClassChart(options) {
                         case "Hazırlık": universitylist['hazirlik'] = row.count; break;
                         default: break;
                     }
-                } else if (row.usertype === "Lise / Mezun") {
+                } else if (row.usertype === "Lise") {
                     switch (row.class) {
                         case "9": highschoollist['9'] = row.count; break;
                         case "10": highschoollist['10'] = row.count; break;
