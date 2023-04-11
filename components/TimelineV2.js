@@ -46,7 +46,6 @@ export default function TimelineV2(dateValue) {
                         const element = campaignList[campaign];
 
                         const { data, error } = await supabase.rpc('timeline_query', { eventname: element.title, from_input: dateValue.startDate, until_input: dateValue.endDate })
-                        console.log(element.title, data)
 
                         let submissionCountList = []
                         let applicationTotal = 0
@@ -73,8 +72,6 @@ export default function TimelineV2(dateValue) {
                                 borderColor: element.themeColor,
                                 backgroundColor: element.themeColor
                             })
-
-
                         }
 
                     }
