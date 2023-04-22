@@ -89,3 +89,17 @@ create or replace function renderschoollist_by_time(input text, from_input times
   order by count desc
 $$ language sql 
 ```
+
+## Class info by time (classinfo_by_time)
+```sql
+select distinct class, count(*), usertype 
+from (
+  select distinct on (email) email, class, usertype 
+  from users
+  where created_at >= from_input
+  and created_at <= until_input
+  and usertype != ' '
+  and class != ' '
+) as temp
+group by  class, usertype
+```
